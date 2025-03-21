@@ -1,76 +1,51 @@
-body {
-    background-color: rgb(0, 0, 0) !important;
-}
+/* Home.css */
 
 .home-container {
-    min-height: 100vh;
-    background-color: #1a1a1a;
-    color: white;
+    margin-top: 20px;
+    
+    
+  }
+  
+  .carousel-container {
+    margin-bottom: 20px;
+  }
+  
+  .card-grid {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    
+  }
+  
+  .card-column {
+    padding: 10px;
+   
+    justify-content: center;
+    display: flex;
+  }
+  
+  .custom-card {
+    height: 100%; /* Garante que os cards tenham a mesma altura */
+    max-width: 300px;
+    height: 100%;
     align-items: center;
-    padding: 2rem;
-}
+    display: flex;
+    
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(10px);
+  }
 
-.home-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-}
+  .cardbt {
+    background-color: #ff0000; /* Cor de fundo vermelha */
+    color: #ffffff; /* Cor do texto branca */
+    border: none; 
+    
+  }
 
-.brand-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    max-width: 1000px;
-}
+  .cardbt:hover {
+    background-color: white;
+  }
 
-.brand-card {
-    background-color: #2a2a2a;
-    padding: 1.5rem;
-    border-radius: 12px;
+  .escrita1 {
     text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.brand-image {
-    height: 80px;
-    margin-bottom: 1rem;
-}
-
-.brand-name {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.brand-button {
-    margin-top: 1rem;
-    background-color: #ff4500;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-}
-
-.brand-button:hover {
-    background-color: #e03e00;
-}
-
-/* Carousel Styles */
-.home-carousel {
-    width: 80%;
-    max-width: 1200px;
-    margin-bottom: 2rem;
-}
-
-.carousel-image {
-    border-radius: 12px;
-    max-height: 400px;
-    object-fit: cover;
-}
-
-.carousel-caption h3 {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0.5rem;
-    border-radius: 8px;
-}
+  }

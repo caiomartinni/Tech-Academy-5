@@ -1,63 +1,114 @@
-
-import React from "react";
-import { motion } from "framer-motion";
-import { Button, Card, Carousel } from "react-bootstrap";
-import "./Home.css";
-
-const brands = [
-  { name: "Toyota", image: "/images/toyota.png" },
-  { name: "Ford", image: "/images/ford.png" },
-  { name: "Chevrolet", image: "/images/chevrolet.png" },
-  { name: "Honda", image: "/images/honda.png" },
-];
-
-const carouselItems = [
-  { image: "/images/carousel1.jpg", caption: "Descubra os melhores modelos!" },
-  { image: "/images/carousel2.jpg", caption: "Encontre o carro dos seus sonhos!" },
-  { image: "/images/carousel3.jpg", caption: "Melhores ofertas disponíveis!" },
-];
+import React from 'react';
+import { Carousel, Card, Button, Container, Row, Col } from 'react-bootstrap';
+import './Home.css'; // Importe o arquivo CSS
+import imagem1 from './icons/Buick-logo.svg.png'; // Importe a imagem
+import imagem2 from './icons/Citroen_2022.svg';
+import card1 from './icons/Honda-Logo-1981.png';
+import card2 from './icons/peugeot-logo-0-1.png';
+import teste from './icons/teste.webp'
 
 const Home: React.FC = () => {
   return (
-    <div className="home-container">
-      <Carousel className="home-carousel">
-        {carouselItems.map((item, index) => (
-          <Carousel.Item key={index}>
-            <img className="d-block w-100 carousel-image" src={item.image} alt={`Slide ${index + 1}`} />
-            <Carousel.Caption>
-              <h3>{item.caption}</h3>
-            </Carousel.Caption>
-          </Carousel.Item>
-        ))}
+    
+    <Container className="home-container">
+      {/* Carrossel */}
+      <Carousel className="carousel-container">
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src={teste} // Substitua pelas suas imagens
+            alt="Primeiro Slide"
+          />
+          <Carousel.Caption>
+            <h3>Slide 1</h3>
+            
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src={teste}
+            alt="Segundo Slide"
+          />
+          <Carousel.Caption>
+            <h3>Slide 2</h3>
+           
+          </Carousel.Caption>
+        </Carousel.Item>
+        {/* Adicione mais Carousel.Item conforme necessário */}
       </Carousel>
+
+      {/* Grid de Cards */}
+      <h1 className='escrita1'>Marcas</h1>
+      <Row className="card-grid">
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 1</Card.Title>
+              <Button className='cardbt' variant="primary">Ação 1</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 2</Card.Title>
+
+              <Button variant="primary">Ação 2</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 2</Card.Title>
+
+              <Button variant="primary">Ação 2</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 2</Card.Title>
+
+              <Button variant="primary">Ação 2</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 2</Card.Title>
+
+              <Button variant="primary">Ação 2</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="card-column">
+          <Card className="custom-card">
+            <Card.Img variant="top" src={card2} />
+            <Card.Body>
+              <Card.Title>Card 2</Card.Title>
+
+              <Button variant="primary">Ação 2</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        {/* Adicione mais Col e Card conforme necessário */}
+      </Row>
       
-      <motion.h1 
-        className="home-title"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        CarTalogo - Catálogo de Veículos
-      </motion.h1>
-      
-      <div className="brand-grid">
-        {brands.map((brand, index) => (
-          <motion.div 
-            key={index} 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <Card className="brand-card">
-              <img src={brand.image} alt={brand.name} className="brand-image" />
-              <h2 className="brand-name">{brand.name}</h2>
-              <Button className="brand-button">Ver Modelos</Button>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
-    </div>
+    </Container>
+    
+
   );
 };
 
 export default Home;
+
+

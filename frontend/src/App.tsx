@@ -1,6 +1,7 @@
 
 import { BrowserRouter, Routes, Route, Outlet  } from 'react-router-dom'
 import Header from "./components/ui/Header"
+import Footer from "./components/ui/Footer"
 import Home from './pages/public/Home'
 import Login from './pages/public/Login'
 import CriarConta from './pages/public/CriarConta'
@@ -25,6 +26,7 @@ function App() {
         </Route>
         </Route>
       </Routes>
+      <Footer/>
     </BrowserRouter>
 
   )
