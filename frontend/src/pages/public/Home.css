@@ -38,7 +38,7 @@ body {
   }
 
   .cardbt {
-    background-color: #ff0000; /* Cor de fundo vermelha */
+    background-color:#ffcc00; /* Cor de fundo vermelha */
     color: #ffffff; /* Cor do texto branca */
     border: none; 
     
@@ -50,6 +50,7 @@ body {
 
   .escrita1 {
     text-align: center;
+    color: white;
   }
 
   .custom-card {
@@ -71,5 +72,62 @@ body {
   
   .cardbt:hover {
     background-color: #ffffff;
-    color: #ff0000;
+    color: #ffcc00;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-btn {
+    background-color: #ffcc00;
+    color: #ffffff;
+    margin: 0 5px;
+    border: none;
+    padding: 10px 15px;
+  }
+  
+  .pagination-btn.active {
+    background-color: #ffffff;
+    color: #ffcc00;
+  }
+
+  .pagination-btn:hover {
+    background-color: white;
+    color: #ffcc00;
+  }
+
+  .arrow-btn {
+    background-color: #ffcc00;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .arrow-btn:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
+
+  .arrow-btn:hover {
+    background-color: white;
+    color: #ffcc00;
+  }
+  
+  .pagination-btn {
+    background-color: #ffcc00;
+    color: #ffffff;
+    margin: 0 5px;
+    border: none;
+    padding: 10px 15px;
+  }
+  
+  .pagination-btn.active {
+    background-color: #ffffff;
+    color: #ffcc00;
   }

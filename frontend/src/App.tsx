@@ -9,6 +9,7 @@ import LayoutLogin from './components/layout/LayoutLogin'
 import BackgroudLogin from "./assets/backgrod/backgroud.webp"
 import LayoutHome from './components/layout/layouthome'
 import RecuperarSenha from './pages/public/RecuperarSenha'
+
 function App() {
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route element={<LayoutHome><Outlet /></LayoutHome>}>
           <Route path="/home" element={<Home />} /></Route>
+         
         <Route element={<LayoutLogin backgroundImage={BackgroudLogin}><Outlet /></LayoutLogin>}>
           <Route path="/login" element={<Login />} />
           <Route path="/recuperar-senha" element={<RecuperarSenha />} />
