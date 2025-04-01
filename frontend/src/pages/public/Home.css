@@ -131,3 +131,7 @@ body {
     background-color: #ffffff;
     color: #ffcc00;
   }
+
+  .home-container {
+    margin-bottom: 20px;
+  }
