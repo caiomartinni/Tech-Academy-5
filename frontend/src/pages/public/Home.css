@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background: linear-gradient(-100deg, #bdc3c7, #2c3e50);
 }
 
 .home-container {
@@ -50,4 +50,26 @@ body {
 
   .escrita1 {
     text-align: center;
+  }
+
+  .custom-card {
+    height: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .custom-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .cardbt:hover {
+    background-color: #ffffff;
+    color: #ff0000;
   }

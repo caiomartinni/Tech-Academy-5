@@ -104,3 +104,13 @@
 .register-link p a:hover {
     text-decoration: underline;
 }
+
+.toggle-password {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+}
