@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Carousel, Card, Button, Container, Row, Col } from 'react-bootstrap';
-import { motion, AnimatePresence } from 'framer-motion';
-import './Home.css';
-import teste from './icons/teste.webp';
-import card2 from './icons/peugeot-logo-0-1.png';
+import React, { useState } from "react";
+import { Carousel, Card, Button, Container, Row, Col } from "react-bootstrap";
+import { motion, AnimatePresence } from "framer-motion";
+import "./Home.css";
+import teste from "./icons/teste.webp";
+import card2 from "./icons/peugeot-logo-0-1.png";
 
 const itemsPerPage = 9; // Número de itens por página
 
@@ -13,7 +13,9 @@ const Home: React.FC = () => {
   const totalPages = Math.ceil(totalCards.length / itemsPerPage);
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : totalPages));
+    setCurrentPage((prevPage) =>
+      prevPage < totalPages ? prevPage + 1 : totalPages
+    );
   };
 
   const handlePreviousPage = () => {
@@ -81,7 +83,7 @@ const Home: React.FC = () => {
                     <Card.Title>
                       Card {(currentPage - 1) * itemsPerPage + index + 1}
                     </Card.Title>
-                    <Button className="cardbt" variant="primary">
+                    <Button href="Carlist" className="cardbt" variant="primary">
                       Ação {(currentPage - 1) * itemsPerPage + index + 1}
                     </Button>
                   </Card.Body>
@@ -94,19 +96,29 @@ const Home: React.FC = () => {
 
       {/* Controles de Paginação com Setas */}
       <div className="pagination-container">
-        <Button className="arrow-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+        <Button
+          className="arrow-btn"
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+        >
           &#8592; {/* Seta para a esquerda */}
         </Button>
         {Array.from({ length: totalPages }).map((_, index) => (
           <Button
             key={index}
-            className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
+            className={`pagination-btn ${
+              currentPage === index + 1 ? "active" : ""
+            }`}
             onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}
           </Button>
         ))}
-        <Button className="arrow-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+        <Button
+          className="arrow-btn"
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+        >
           &#8594; {/* Seta para a direita */}
         </Button>
       </div>

@@ -1,0 +1,49 @@
+.account-page {
+  font-family: "Roboto", sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+h1,
+h2 {
+  color: white;
+}
+
+.user-info p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.actions input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #ffcc00;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+button.logout-button {
+  background-color: #dc3545;
+}
+
+button:hover {
+  background-color: white;
+  color: #ffcc00;
+}
