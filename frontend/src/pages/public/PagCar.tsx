@@ -21,7 +21,8 @@ const CarDetails = () => {
       setCar({
         name: "Fusca",
         image: "fusca.jpg",
-        description: "Um clássico!",
+        description:
+          "O Fusca (Volkswagen Beetle) é um dos carros mais icônicos do mundo. Lançado na Alemanha na década de 1930, ele se tornou extremamente popular devido à sua confiabilidade, simplicidade mecânica e baixo custo de manutenção.",
         specs: "1.3L, 40cv",
         marketValue: 25000,
         type: "Hatch",
@@ -46,22 +47,27 @@ const CarDetails = () => {
                 />
               </Col>
               <Col md={6}>
-                <Card.Body>
+                <Card.Body className="BoxCar">
                   <Card.Title className="fw-bold fs-3">{car.name}</Card.Title>
                   <Card.Text>
-                    <strong>Descrição:</strong> {car.description}
+                    <strong className="title">Descrição:</strong>{" "}
+                    {car.description}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Ficha Técnica:</strong> {car.specs}
+                    <strong className="title">Ficha Técnica:</strong>{" "}
+                    {car.specs}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Valor Médio:</strong> R$ {car.marketValue}
+                    <strong className="title">Valor Médio:</strong> R${" "}
+                    {car.marketValue}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Tipo do Veículo:</strong> {car.type}
+                    <strong className="title">Tipo do Veículo:</strong>{" "}
+                    {car.type}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Ano de Fabricação:</strong> {car.year}
+                    <strong className="title">Ano de Fabricação:</strong>{" "}
+                    {car.year}
                   </Card.Text>
                 </Card.Body>
               </Col>
