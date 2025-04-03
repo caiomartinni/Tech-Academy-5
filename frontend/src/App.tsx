@@ -10,6 +10,7 @@ import LayoutHome from "./components/layout/layouthome";
 import RecuperarSenha from "./pages/public/RecuperarSenha";
 import Carlist from "./pages/public/Carlist";
 import Conta from "./pages/public/Conta";
+import PagCar from "./pages/public/PagCar";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               </LayoutLogin>
             }
           >
+            <Route path="/pagcar" element={<PagCar />} />
             <Route path="/login" element={<Login />} />
             <Route path="/recuperar-senha" element={<RecuperarSenha />} />
             <Route path="/CriarConta" element={<CriarConta />} />
