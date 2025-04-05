@@ -1,7 +1,7 @@
 .account-page {
   font-family: "Roboto", sans-serif;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
   padding: 20px;
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -46,4 +46,14 @@ button.logout-button {
 button:hover {
   background-color: white;
   color: #ffcc00;
+}
+
+.box {
+}
+
+main {
+  min-height: 36.55vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

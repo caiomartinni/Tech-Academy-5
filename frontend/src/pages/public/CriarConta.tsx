@@ -6,7 +6,9 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { PiIdentificationCard } from "react-icons/pi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { cpf } from "cpf-cnpj-validator"; // <- Importando a função de validação de CPF
 
+// Validação com zod + validação oficial de CPF
 const schema = z.object({
   nomeUsuario: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
   email: z.string().email("E-mail inválido"),
@@ -14,7 +16,10 @@ const schema = z.object({
     .string()
     .min(11, "CPF deve ter 11 dígitos")
     .max(11, "CPF deve ter 11 dígitos")
-    .regex(/^[0-9]+$/, "CPF deve conter apenas números"),
+    .regex(/^[0-9]+$/, "CPF deve conter apenas números")
+    .refine((val) => cpf.isValid(val), {
+      message: "CPF inválido",
+    }),
   senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
@@ -46,9 +51,15 @@ function CriarConta() {
           <h1>Criar Conta</h1>
 
           <div className="input-box">
-            <input type="text" placeholder="Nome de Usuário" {...register("nomeUsuario")} />
+            <input
+              type="text"
+              placeholder="Nome de Usuário"
+              {...register("nomeUsuario")}
+            />
             <FaUser className="icon" />
-            {errors.nomeUsuario && <p className="error">{errors.nomeUsuario.message}</p>}
+            {errors.nomeUsuario && (
+              <p className="error">{errors.nomeUsuario.message}</p>
+            )}
           </div>
 
           <div className="input-box">
@@ -70,7 +81,10 @@ function CriarConta() {
               {...register("senha")}
             />
             <FaLock className="icon" />
-            <span className="toggle-password" onClick={togglePasswordVisibility}>
+            <span
+              className="toggle-password"
+              onClick={togglePasswordVisibility}
+            >
               {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
             </span>
             {errors.senha && <p className="error">{errors.senha.message}</p>}

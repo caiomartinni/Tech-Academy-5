@@ -34,7 +34,7 @@ const CarDetails = () => {
   if (!car) return <p>Carregando...</p>;
 
   return (
-    <Container className="mt-4">
+    <Container className="box mt-4">
       <Row className="justify-content-center">
         <Col md={10}>
           <Card className="shadow-lg p-3 rounded">
