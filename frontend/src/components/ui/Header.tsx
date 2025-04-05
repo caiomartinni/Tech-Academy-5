@@ -1,5 +1,3 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
@@ -49,7 +47,9 @@ function Header() {
               </NavDropdown>
             </Nav>
             <Form className="d-flex">
-              <button className="login-button">Login</button>
+              <Link to={"/login"} className="login-button">
+                Login
+              </Link>
             </Form>
           </Navbar.Collapse>
         </Container>
