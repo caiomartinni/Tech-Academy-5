@@ -3,6 +3,7 @@ import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Carlist.css";
 import card2 from "./icons/peugeot-logo-0-1.png";
+import { Link } from "react-router-dom";
 
 const itemsPerPage = 9; // Número de itens por página
 
@@ -47,9 +48,9 @@ const Carlist: React.FC = () => {
                     <Card.Title>
                       Card {(currentPage - 1) * itemsPerPage + index + 1}
                     </Card.Title>
-                    <Button className="cardbt" variant="primary">
+                    <Link to={"/pagcar"} className="cardbt">
                       Ação {(currentPage - 1) * itemsPerPage + index + 1}
-                    </Button>
+                    </Link>
                   </Card.Body>
                 </Card>
               </motion.div>
@@ -92,13 +93,13 @@ const Carlist: React.FC = () => {
         className="home-button-container"
         style={{ textAlign: "center", marginTop: "20px" }}
       >
-        <Button
+        <Link
           className="home-button"
-          variant="success"
+          to="/home"
           onClick={() => (window.location.href = "/")}
         >
           Voltar para Página Home
-        </Button>
+        </Link>
       </div>
     </Container>
   );

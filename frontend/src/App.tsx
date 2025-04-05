@@ -11,6 +11,8 @@ import RecuperarSenha from "./pages/public/RecuperarSenha";
 import Carlist from "./pages/public/Carlist";
 import Conta from "./pages/public/Conta";
 import PagCar from "./pages/public/PagCar";
+import Polpriv from "./pages/public/Polpriv";
+import Term from "./pages/public/Term";
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
             <Route path="/recuperar-senha" element={<RecuperarSenha />} />
             <Route path="/CriarConta" element={<CriarConta />} />
             <Route path="/conta" element={<Conta />} />
+            <Route path="/polpriv" element={<Polpriv />} />
+            <Route path="/term" element={<Term />} />
           </Route>
         </Route>
       </Routes>

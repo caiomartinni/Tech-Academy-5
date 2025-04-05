@@ -38,6 +38,8 @@ body {
   background-color: #ffcc00; /* Cor de fundo vermelha */
   color: #ffffff; /* Cor do texto branca */
   border: none;
+  text-decoration: none;
+  border-radius: 5px;
 }
 
 .cardbt:hover {
@@ -141,6 +143,7 @@ body {
   font-size: 16px;
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
+  text-decoration: none;
 }
 
 .home-button:hover {
