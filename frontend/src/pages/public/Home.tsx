@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./Home.css";
 import teste from "./icons/teste.webp";
 import card2 from "./icons/peugeot-logo-0-1.png";
+import { Link } from "react-router-dom";
 
 const itemsPerPage = 9; // Número de itens por página
 
@@ -83,9 +84,9 @@ const Home: React.FC = () => {
                     <Card.Title>
                       Card {(currentPage - 1) * itemsPerPage + index + 1}
                     </Card.Title>
-                    <Button href="Carlist" className="cardbt" variant="primary">
+                    <Link to={"/carlist"} className="cardbt">
                       Ação {(currentPage - 1) * itemsPerPage + index + 1}
-                    </Button>
+                    </Link>
                   </Card.Body>
                 </Card>
               </motion.div>
