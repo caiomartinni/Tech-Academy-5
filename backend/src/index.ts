@@ -1,31 +1,39 @@
 import express from "express";
+import cors from "cors";
 import sequelize from "./config/database";
 import userRoutes from "./routes/userRoutes";
-import bookRoutes from "./routes/bookRoutes";
+import carRoutes from "./routes/carRoutes";
+import brandRoutes from "./routes/brandRoutes";
 import loginRoutes from "./routes/loginRoutes";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
+// Middlewares
+app.use(cors()); // Permite acesso externo
+app.use(express.json());
+
+// Rotas
+app.use("/api", loginRoutes);
+app.use("/api", userRoutes);
+app.use("/api", carRoutes);
+app.use("/api", brandRoutes);
+
+// Rota de teste
 app.get("/", (req, res) => {
-  res.send("Hello, World! :)");
+  res.send("API funcionando! 🚀");
 });
 
-app.use(express.json());
-app.use(userRoutes);
-app.use(bookRoutes);
-app.use(loginRoutes);
-
-// sync database
+// Sincroniza o banco de dados
 sequelize
-  .sync({ alter: true })
+  .sync({ alter: true }) // alter mantém as tabelas atualizadas sem perder dados
   .then(() => {
-    console.log("database foi sincronizado com sucesso");
+    console.log("Banco de dados sincronizado com sucesso!");
   })
   .catch((error) => {
-    console.log("deu zica no bagulho", error);
+    console.error("Erro ao sincronizar banco de dados:", error);
   });
 
 app.listen(port, () => {
-  console.log("Server is running on port ", port);
+  console.log(`Servidor rodando na porta ${port}`);
 });
