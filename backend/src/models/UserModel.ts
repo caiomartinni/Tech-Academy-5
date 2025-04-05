@@ -1,14 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database";
 import bcrypt from "bcrypt";
-import BookModel from "./BookModel";
 
 class UserModel extends Model {
-  id: number | undefined;
-  name: string | undefined;
-  email: string | undefined;
-  password: string | undefined;
-  updatedBy: number | undefined;
+  id!: number;
+  name!: string;
+  email!: string;
+  password!: string;
+  cpf!: string;
+  updatedBy?: number;
 
   public async hashPassword() {
     this.password = await bcrypt.hash(this.password!, 10);
@@ -16,6 +16,22 @@ class UserModel extends Model {
 
   public async validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password!);
+  }
+
+  public static validateCPF(cpf: string): boolean {
+    cpf = cpf.replace(/\D/g, ""); // Remove caracteres não numéricos
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // Impede CPFs inválidos
+
+    const calcDV = (slice: number): number => {
+      let sum = 0;
+      for (let i = 0; i < slice; i++) {
+        sum += parseInt(cpf[i]) * (slice + 1 - i);
+      }
+      let remainder = sum % 11;
+      return remainder < 2 ? 0 : 11 - remainder;
+    };
+
+    return calcDV(9) === parseInt(cpf[9]) && calcDV(10) === parseInt(cpf[10]);
   }
 }
 
@@ -41,6 +57,13 @@ UserModel.init(
     cpf: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isValidCPF(value: string) {
+          if (!UserModel.validateCPF(value)) {
+            throw new Error("CPF inválido");
+          }
+        },
+      },
     },
     updatedBy: {
       type: DataTypes.INTEGER,
@@ -62,16 +85,6 @@ UserModel.beforeUpdate(async (user: UserModel) => {
   if (user.changed("password")) {
     await user.hashPassword();
   }
-});
-
-UserModel.belongsTo(BookModel, {
-  foreignKey: "userId", // definindo qual é a fk
-  as: "user", // define o nome da relação na busca
-});
-// mapeamento bidirecional
-BookModel.hasMany(UserModel, {
-  foreignKey: "userId",
-  as: "user",
 });
 
 export default UserModel;
