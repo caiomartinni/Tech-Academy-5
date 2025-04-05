@@ -10,10 +10,10 @@ import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// rota pública
+// Rota pública (não exige login)
 router.post("/users", createUser);
 
-// rotas privadas
+// Rotas privadas (exigem token JWT)
 router.get("/users", authMiddleware, getAllUsers);
 router.get("/users/:id", authMiddleware, getUserById);
 router.put("/users/:id", authMiddleware, updateUser);
