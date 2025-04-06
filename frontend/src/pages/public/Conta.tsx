@@ -1,38 +1,110 @@
-import React, { useState } from "react";
 import "./Conta.css";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import api from "../../service/api";
+
+interface User {
+  name: string;
+  email: string;
+  cpf: string;
+}
 
 const AccountPage = () => {
   const [password, setPassword] = useState("");
-  const user = {
-    name: "João Silva",
-    email: "joao@email.com",
-    CPF: "12345678910",
+  const { logout } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    setLoading(true);
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("Usuário não encontrado.");
+        return;
+      }
+
+      const { data } = await api.get(`/users/${userId}`);
+      setUser(data);
+    } catch (error) {
+      alert(
+        axios.isAxiosError(error)
+          ? error?.response?.data || "Erro ao carregar os dados."
+          : "Erro desconhecido."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleChangePassword = () => {
-    alert("Senha trocada com sucesso!");
-    setPassword(""); // Limpar campo após trocar a senha
+ // ======================================================================================
+
+  const handleChangePassword = async () => {
+    if (!password) {
+      alert("Por favor, insira uma nova senha.");
+      return;
+    }
+
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("Usuário não encontrado.");
+        return;
+      }
+
+      // Realiza o PUT para atualizar a senha
+      await api.put(`/users/${userId}`, {
+        password, // Envia a nova senha no corpo da requisição
+      });
+
+      alert("Senha trocada com sucesso!");
+      setPassword("");
+    } catch (error) {
+      alert(
+        axios.isAxiosError(error)
+          ? error?.response?.data || "Erro ao atualizar a senha."
+          : "Erro desconhecido."
+      );
+    }
   };
 
-  const handleLogout = () => {
-    alert("Você foi deslogado!");
-  };
+  if (loading) {
+    return (
+      <div
+        className="loading"
+        style={{ textAlign: "center", padding: "40px 0", fontSize: "32px" }}
+      >
+        Carregando...
+      </div>
+    );
+  }
+
+  // ======================================================================================
 
   return (
     <main>
       <div className="account-page">
         <h1>Informações da Conta</h1>
-        <div className="user-info">
-          <p>
-            <strong>Nome:</strong> {user.name}
-          </p>
-          <p>
-            <strong>Email:</strong> {user.email}
-          </p>
-          <p>
-            <strong>CPF</strong> {user.CPF}
-          </p>
-        </div>
+        {user ? (
+          <div className="user-info">
+            <p>
+              <strong>Nome:</strong> {user.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>CPF:</strong> {user.cpf}
+            </p>
+          </div>
+        ) : (
+          <p>Usuário não encontrado.</p>
+        )}
         <div className="actions">
           <h2>Trocar Senha</h2>
           <input
@@ -40,9 +112,16 @@ const AccountPage = () => {
             placeholder="Nova senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            aria-label="Nova senha"
           />
-          <button onClick={handleChangePassword}>Alterar</button>
-          <button className="logout-button" onClick={handleLogout}>
+          <button
+            style={{ marginBottom: "10px" }}
+            className="change-password-button"
+            onClick={handleChangePassword}
+          >
+            Alterar
+          </button>
+          <button className="logout-button" onClick={logout}>
             Deslogar
           </button>
         </div>

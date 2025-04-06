@@ -50,9 +50,13 @@ function Header() {
             </Nav>
             <Form className="d-flex">
               {isLoggedIn ? (
-                <Link to={"Conta"} className="login-button">
-                  Conta
-                </Link>
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Link to={"Conta"} className="login-button">
+                    Conta
+                  </Link>
+
+                  <Link to={"/cadastrocar"} className="login-button">Cadastro Car</Link>
+                </div>
               ) : (
                 <Link to={"/login"} className="login-button">
                   Login

@@ -15,7 +15,8 @@ const decodeToken = (token: string) => {
   try {
     const base64Payload = token.split(".")[1];
     const payload = JSON.parse(atob(base64Payload));
-    return payload.user ?? payload; // Retorna diretamente se não houver uma propriedade user
+    console.log("Decoded token payload:", payload); // Log para verificar o conteúdo do token
+    return payload; // Retorna o payload completo
   } catch (error) {
     console.error("Erro ao decodificar token:", error);
     return null;
@@ -38,11 +39,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const userData = decodeToken(token);
     if (userData) {
-      localStorage.setItem("userId", userData.id || "");
-      localStorage.setItem("userName", userData.name || "");
+      const userId = userData.id || ""; // Certifique-se de que o payload contém "id"
+      const userName = userData.email || ""; // Ajuste conforme o campo no token
 
-      setUserId(userData.id || null);
-      setUserName(userData.name || null);
+      console.log("User ID:", userId); // Log para verificar o ID do usuário
+      console.log("User Name:", userName); // Log para verificar o nome do usuário
+
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
+
+      setUserId(userId);
+      setUserName(userName);
+    } else {
+      console.error("Erro: Dados do usuário não encontrados no token.");
     }
 
     setToken(token);
@@ -53,7 +62,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
       localStorage.removeItem("userName");
-      localStorage.removeItem("userAdmin");
       setToken(null);
       setUserId(null);
       setUserName(null);
@@ -69,7 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userName,
         login,
         logout,
-        isAuthenticated: true, // Sempre retorna true para permitir acesso a rotas privadas
+        isAuthenticated: !!token, // Verifica se o token existe
       }}
     >
       {children}

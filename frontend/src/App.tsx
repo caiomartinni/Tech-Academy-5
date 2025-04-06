@@ -15,6 +15,7 @@ import Polpriv from "./pages/public/Polpriv";
 import Term from "./pages/public/Term";
 import CadastroCar from "./pages/public/CadastroCar";
 import PrivateRoute from "./components/PrivateRoute";
+import Erro404 from "./pages/public/Erro404";
 
 function App() {
   return (
@@ -44,6 +45,11 @@ function App() {
             <Route path="/polpriv" element={<Polpriv />} />
             <Route path="/term" element={<Term />} />
           </Route>
+
+          <Route element={<LayoutLogin backgroundImage={BackgroudLogin}><Outlet /></LayoutLogin>}>
+            <Route path="*" element={<Erro404/>} />
+          </Route>
+
 
         </Route>
       </Routes>
