@@ -13,6 +13,7 @@ import Conta from "./pages/public/Conta";
 import PagCar from "./pages/public/PagCar";
 import Polpriv from "./pages/public/Polpriv";
 import Term from "./pages/public/Term";
+import CadastroCar from "./pages/public/CadastroCar";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/conta" element={<Conta />} />
             <Route path="/polpriv" element={<Polpriv />} />
             <Route path="/term" element={<Term />} />
+            <Route path="/cadastrocar" element={<CadastroCar />} />
           </Route>
         </Route>
       </Routes>
