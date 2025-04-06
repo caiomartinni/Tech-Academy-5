@@ -4,7 +4,6 @@ interface AuthContextType {
   token: string | null;
   userId: string | null;
   userName: string | null;
-  userAdmin: string | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -33,9 +32,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userName, setUserName] = useState<string | null>(
     localStorage.getItem("userName")
   );
-  const [userAdmin, setUserAdmin] = useState<string | null>(
-    localStorage.getItem("userAdmin")
-  );
 
   const login = (token: string) => {
     localStorage.setItem("authToken", token);
@@ -44,10 +40,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userData) {
       localStorage.setItem("userId", userData.id || "");
       localStorage.setItem("userName", userData.name || "");
-      localStorage.setItem("userAdmin", userData.admin || "");
+
       setUserId(userData.id || null);
       setUserName(userData.name || null);
-      setUserAdmin(userData.admin || null);
     }
 
     setToken(token);
@@ -62,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(null);
       setUserId(null);
       setUserName(null);
-      location.reload();
+      location.href = "/home";
     }
   };
 
@@ -73,9 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userId,
         userName,
         login,
-        userAdmin,
         logout,
-        isAuthenticated: !!token,
+        isAuthenticated: true, // Sempre retorna true para permitir acesso a rotas privadas
       }}
     >
       {children}

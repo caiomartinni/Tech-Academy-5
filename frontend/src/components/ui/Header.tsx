@@ -9,6 +9,8 @@ import Logo from "../../assets/icons/logo.png";
 import "./Header.css";
 
 function Header() {
+  const isLoggedIn = !!localStorage.getItem("authToken"); // Verifica se o token existe no localStorage
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -50 }}
@@ -47,9 +49,15 @@ function Header() {
               </NavDropdown>
             </Nav>
             <Form className="d-flex">
-              <Link to={"/login"} className="login-button">
-                Login
-              </Link>
+              {isLoggedIn ? (
+                <Link to={"Conta"} className="login-button">
+                  Conta
+                </Link>
+              ) : (
+                <Link to={"/login"} className="login-button">
+                  Login
+                </Link>
+              )}
             </Form>
           </Navbar.Collapse>
         </Container>
