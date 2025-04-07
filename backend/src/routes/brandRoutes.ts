@@ -3,16 +3,16 @@ import {
   getAllBrands,
   getBrandById,
   createBrand,
-} from "../controllers/brandController";
+} from "../controllers/brandController"; // ✅ Certifique-se de que este caminho está correto!
 import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// rotas públicas
-router.get("/brands", getAllBrands);
-router.get("/brands/:id", getBrandById);
+// 🔓 Rotas públicas
+router.get("/api/brands", getAllBrands);
+router.get("/api/brands/:id", getBrandById);
 
-// rotas privadas (apenas criação de marca)
-router.post("/brands", authMiddleware, createBrand);
+// 🔒 Rotas privadas (apenas criação de marca requer autenticação)
+router.post("/api/brands", authMiddleware, createBrand);
 
 export default router;

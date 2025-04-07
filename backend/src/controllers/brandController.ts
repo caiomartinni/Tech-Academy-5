@@ -1,36 +1,52 @@
 import { Request, Response } from "express";
-import BrandModel from "../models/BrandModel";
+import Brand from "../models/BrandModel"; // Importa o modelo Brand
 
-// Busca todas as marcas
+// 🔎 Buscar todas as marcas
 export const getAllBrands = async (req: Request, res: Response) => {
-  const brands = await BrandModel.findAll();
-  res.send(brands);
-};
-
-// Busca uma marca por ID
-export const getBrandById = async (
-  req: Request<{ id: string }>,
-  res: Response
-) => {
-  const brand = await BrandModel.findByPk(req.params.id);
-  if (!brand) {
-    return res.status(404).json({ error: "Brand not found" });
+  try {
+    const brands = await Brand.findAll();
+    res.json(brands);
+  } catch (error) {
+    console.error("Erro ao buscar marcas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-  res.json(brand);
 };
 
-// Cria uma nova marca
+// 🔎 Buscar uma marca por ID
+export const getBrandById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const brand = await Brand.findByPk(id);
+
+    if (!brand) {
+      return res.status(404).json({ error: "Marca não encontrada" });
+    }
+
+    res.json(brand);
+  } catch (error) {
+    console.error("Erro ao buscar marca por ID:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
+// ✨ Criar uma nova marca
 export const createBrand = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
 
+    // Validação: Garante que o nome foi enviado
     if (!name) {
-      return res.status(400).json({ error: "Name required" });
+      return res.status(400).json({ error: "O campo 'name' é obrigatório" });
     }
 
-    const brand = await BrandModel.create({ name });
-    res.status(201).json(brand);
+    // Criar a marca no banco de dados
+    const newBrand = await Brand.create({ name });
+
+    res
+      .status(201)
+      .json({ message: "Marca cadastrada com sucesso!", brand: newBrand });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error: " + error });
+    console.error("Erro ao cadastrar marca:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };

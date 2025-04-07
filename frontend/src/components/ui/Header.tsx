@@ -9,7 +9,7 @@ import Logo from "../../assets/icons/logo.png";
 import "./Header.css";
 
 function Header() {
-  const isLoggedIn = !!localStorage.getItem("authToken"); // Verifica se o token existe no localStorage
+  const isLoggedIn = !!localStorage.getItem("authToken"); // ✅ Verifica se o usuário está autenticado
 
   return (
     <motion.div
@@ -51,14 +51,19 @@ function Header() {
             <Form className="d-flex">
               {isLoggedIn ? (
                 <div style={{ display: "flex", gap: "10px" }}>
-                    <Link to={"Conta"} className="login-button">
+                  <Link to="/Conta" className="login-button">
                     Conta
                   </Link>
-
-                  <Link to={"/cadastrocar"} className="login-button">Cadastro Car</Link>
+                  <Link to="/cadastrocar" className="login-button">
+                    Cadastro Car
+                  </Link>
+                  <Link to="/cadastro-marca" className="login-button">
+                    Cadastro Marca
+                  </Link>{" "}
+                  {/* ✅ Novo botão */}
                 </div>
               ) : (
-                <Link to={"/login"} className="login-button">
+                <Link to="/login" className="login-button">
                   Login
                 </Link>
               )}

@@ -14,6 +14,7 @@ import PagCar from "./pages/public/PagCar";
 import Polpriv from "./pages/public/Polpriv";
 import Term from "./pages/public/Term";
 import CadastroCar from "./pages/public/CadastroCar";
+import CadastroMarca from "./pages/public/CadastroMarca"; // 👈 Adicionado!
 import PrivateRoute from "./components/PrivateRoute";
 import Erro404 from "./pages/public/Erro404";
 
@@ -23,20 +24,39 @@ function App() {
       <Header />
       <Routes>
         <Route>
-
-          <Route element={<LayoutHome><Outlet /></LayoutHome>}>
+          <Route
+            element={
+              <LayoutHome>
+                <Outlet />
+              </LayoutHome>
+            }
+          >
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/carlist" element={<Carlist />} />
           </Route>
 
-          <Route element={<PrivateRoute><LayoutHome><Outlet /></LayoutHome></PrivateRoute>}>
+          <Route
+            element={
+              <PrivateRoute>
+                <LayoutHome>
+                  <Outlet />
+                </LayoutHome>
+              </PrivateRoute>
+            }
+          >
             <Route path="/cadastrocar" element={<CadastroCar />} />
+            <Route path="/cadastro-marca" element={<CadastroMarca />} />{" "}
+            {/* 👈 Rota adicionada! */}
           </Route>
 
-
-         
-          <Route element={<LayoutLogin backgroundImage={BackgroudLogin}><Outlet /></LayoutLogin>}>
+          <Route
+            element={
+              <LayoutLogin backgroundImage={BackgroudLogin}>
+                <Outlet />
+              </LayoutLogin>
+            }
+          >
             <Route path="/login" element={<Login />} />
             <Route path="/CriarConta" element={<CriarConta />} />
             <Route path="/pagcar" element={<PagCar />} />
@@ -46,11 +66,15 @@ function App() {
             <Route path="/term" element={<Term />} />
           </Route>
 
-          <Route element={<LayoutLogin backgroundImage={BackgroudLogin}><Outlet /></LayoutLogin>}>
-            <Route path="*" element={<Erro404/>} />
+          <Route
+            element={
+              <LayoutLogin backgroundImage={BackgroudLogin}>
+                <Outlet />
+              </LayoutLogin>
+            }
+          >
+            <Route path="*" element={<Erro404 />} />
           </Route>
-
-
         </Route>
       </Routes>
       <Footer />
