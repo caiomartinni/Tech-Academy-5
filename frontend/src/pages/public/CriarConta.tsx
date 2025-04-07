@@ -7,6 +7,9 @@ import { MdEmail } from "react-icons/md";
 import { PiIdentificationCard } from "react-icons/pi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { cpf } from "cpf-cnpj-validator";
+import api from "../../service/api";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Validação com zod + CPF e confirmação de senha
 const schema = z
@@ -63,17 +66,35 @@ function CriarConta() {
     return "Fraca";
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log("Dados do formulário:", data);
+  const navigate = useNavigate();
+
+  const handleRegister = async (data: FormData) => {
+    try {
+      await api.post("/users", {
+        name: data.nomeUsuario,
+        cpf: data.cpf,
+        email: data.email,
+        password: data.senha,
+      });
+      alert("Registration completed successfully!");
+      navigate("/login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error?.response?.data?.error
+            ?.map((e: { message: string }) => e.message)
+            .join(", ") || "Erro ao registrar. Tente novamente.";
+        alert(errorMessage);
+      } else {
+        alert("Erro inesperado. Tente novamente.");
+      }
+    }
   };
 
-  // ================================================================================================================================
-
-  // ================================================================================================================================
   return (
     <div className="center">
       <div className="wrapper">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleRegister)}>
           <h1>Criar Conta</h1>
 
           <div className="input-box">
@@ -81,6 +102,7 @@ function CriarConta() {
               type="text"
               placeholder="Nome de Usuário"
               {...register("nomeUsuario")}
+              aria-label="Nome de Usuário"
             />
             <FaUser className="icon" />
             {errors.nomeUsuario && (
@@ -89,13 +111,23 @@ function CriarConta() {
           </div>
 
           <div className="input-box">
-            <input type="text" placeholder="Email" {...register("email")} />
+            <input
+              type="text"
+              placeholder="Email"
+              {...register("email")}
+              aria-label="Email"
+            />
             <MdEmail className="icon" />
             {errors.email && <p className="error">{errors.email.message}</p>}
           </div>
 
           <div className="input-box">
-            <input type="text" placeholder="CPF" {...register("cpf")} />
+            <input
+              type="text"
+              placeholder="CPF"
+              {...register("cpf")}
+              aria-label="CPF"
+            />
             <PiIdentificationCard className="icon" />
             {errors.cpf && <p className="error">{errors.cpf.message}</p>}
           </div>
@@ -105,6 +137,7 @@ function CriarConta() {
               type={showPassword ? "text" : "password"}
               placeholder="Senha"
               {...register("senha")}
+              aria-label="Senha"
             />
             <FaLock className="icon" />
             <span
@@ -130,6 +163,7 @@ function CriarConta() {
               type={showPassword ? "text" : "password"}
               placeholder="Confirmar Senha"
               {...register("confirmarSenha")}
+              aria-label="Confirmar Senha"
             />
             <FaLock className="icon" />
             {errors.confirmarSenha && (

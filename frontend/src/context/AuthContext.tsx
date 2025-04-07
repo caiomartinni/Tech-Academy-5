@@ -4,7 +4,6 @@ interface AuthContextType {
   token: string | null;
   userId: string | null;
   userName: string | null;
-  userAdmin: string | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -16,7 +15,8 @@ const decodeToken = (token: string) => {
   try {
     const base64Payload = token.split(".")[1];
     const payload = JSON.parse(atob(base64Payload));
-    return payload.user ?? payload; // Retorna diretamente se não houver uma propriedade user
+    console.log("Decoded token payload:", payload); // Log para verificar o conteúdo do token
+    return payload; // Retorna o payload completo
   } catch (error) {
     console.error("Erro ao decodificar token:", error);
     return null;
@@ -33,21 +33,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userName, setUserName] = useState<string | null>(
     localStorage.getItem("userName")
   );
-  const [userAdmin, setUserAdmin] = useState<string | null>(
-    localStorage.getItem("userAdmin")
-  );
 
   const login = (token: string) => {
     localStorage.setItem("authToken", token);
 
     const userData = decodeToken(token);
     if (userData) {
-      localStorage.setItem("userId", userData.id || "");
-      localStorage.setItem("userName", userData.name || "");
-      localStorage.setItem("userAdmin", userData.admin || "");
-      setUserId(userData.id || null);
-      setUserName(userData.name || null);
-      setUserAdmin(userData.admin || null);
+      const userId = userData.id || ""; // Certifique-se de que o payload contém "id"
+      const userName = userData.email || ""; // Ajuste conforme o campo no token
+
+      console.log("User ID:", userId); // Log para verificar o ID do usuário
+      console.log("User Name:", userName); // Log para verificar o nome do usuário
+
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
+
+      setUserId(userId);
+      setUserName(userName);
+    } else {
+      console.error("Erro: Dados do usuário não encontrados no token.");
     }
 
     setToken(token);
@@ -58,11 +62,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
       localStorage.removeItem("userName");
-      localStorage.removeItem("userAdmin");
       setToken(null);
       setUserId(null);
       setUserName(null);
-      location.reload();
+      location.href = "/home";
     }
   };
 
@@ -73,9 +76,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userId,
         userName,
         login,
-        userAdmin,
         logout,
-        isAuthenticated: !!token,
+        isAuthenticated: !!token, // Verifica se o token existe
       }}
     >
       {children}

@@ -16,10 +16,10 @@ app.use(cors()); // Aqui entra a configuração do CORS
 app.use(bodyParser.json());
 
 // Rotas
-app.use("/api", loginRoutes);
-app.use("/api", userRoutes);
-app.use("/api", carRoutes);
-app.use("/api", brandRoutes);
+app.use(loginRoutes);
+app.use(userRoutes);
+app.use(carRoutes);
+app.use(brandRoutes);
 
 // Testando conexão com banco
 sequelize

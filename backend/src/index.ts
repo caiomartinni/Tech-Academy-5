@@ -7,17 +7,17 @@ import brandRoutes from "./routes/brandRoutes";
 import loginRoutes from "./routes/loginRoutes";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // Middlewares
 app.use(cors()); // Permite acesso externo
 app.use(express.json());
 
 // Rotas
-app.use("/api", loginRoutes);
-app.use("/api", userRoutes);
-app.use("/api", carRoutes);
-app.use("/api", brandRoutes);
+app.use(loginRoutes);
+app.use(userRoutes);
+app.use(carRoutes);
+app.use(brandRoutes);
 
 // Rota de teste
 app.get("/", (req, res) => {

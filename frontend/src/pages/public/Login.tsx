@@ -5,6 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUser, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import "./Login.css";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import api from "../../service/api";
+import { useAuth } from "../../context/AuthContext"; // Importa o contexto de autenticação
 
 const schema = z.object({
   usuario: z.string().min(3, "O usuário deve ter pelo menos 3 caracteres"),
@@ -23,25 +27,50 @@ function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth(); // Usa a função login do contexto
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log("Login realizado com sucesso:", data);
+  // ======================================================================================
+
+
+  const handleLogin = async (data: { usuario: string; senha: string }) => {
+    try {
+      const response = await api.post("/login", {
+        email: data.usuario,
+        password: data.senha,
+      });
+
+      const { token } = response.data;
+      login(token); // Chama a função login do contexto
+      alert("Login realizado com sucesso!");
+      navigate("/home");
+      location.reload();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = "Incorrect email or password";
+        alert(errorMessage);
+      }
+    }
   };
+
+  // ======================================================================================
 
   return (
     <div className="center">
       <div className="wrapper">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleLogin)}>
           <h1>Login</h1>
 
           <div className="input-box">
             <input type="text" placeholder="Usuário" {...register("usuario")} />
             <FaUser className="icon" />
-            {errors.usuario && <p className="error">{errors.usuario.message}</p>}
+            {errors.usuario && (
+              <p className="error">{errors.usuario.message}</p>
+            )}
           </div>
 
           <div className="input-box">
@@ -51,7 +80,10 @@ function Login() {
               {...register("senha")}
             />
             <FaLock className="icon" />
-            <span className="toggle-password" onClick={togglePasswordVisibility}>
+            <span
+              className="toggle-password"
+              onClick={togglePasswordVisibility}
+            >
               {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
             </span>
             {errors.senha && <p className="error">{errors.senha.message}</p>}
@@ -59,7 +91,8 @@ function Login() {
 
           <div className="remember-forgot">
             <label>
-              <input type="checkbox" />Lembrar Senha
+              <input type="checkbox" />
+              Lembrar Senha
             </label>
             <a href="/recuperar-senha">Esqueceu a Senha?</a>
           </div>

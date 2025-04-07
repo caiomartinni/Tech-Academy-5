@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/users", createUser);
 
 // Rotas privadas (exigem token JWT)
-router.get("/users", authMiddleware, getAllUsers);
+router.get("/users", getAllUsers);
 router.get("/users/:id", authMiddleware, getUserById);
 router.put("/users/:id", authMiddleware, updateUser);
 router.delete("/users/:id", authMiddleware, deleteUser);
