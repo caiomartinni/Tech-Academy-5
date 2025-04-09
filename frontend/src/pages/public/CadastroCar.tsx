@@ -16,7 +16,7 @@ const CadastroCar: React.FC = () => {
   // ✅ Buscar todas as marcas
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/brands")
+      .get("http://localhost:3000/brands")
       .then((response) => {
         console.log("Marcas carregadas:", response.data);
         setMarcas(response.data);

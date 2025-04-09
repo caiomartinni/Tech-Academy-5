@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import Brand from "../models/BrandModel"; // Importa o modelo Brand
+import BrandModel from "../models/BrandModel";
 
 // 🔎 Buscar todas as marcas
 export const getAllBrands = async (req: Request, res: Response) => {
   try {
-    const brands = await Brand.findAll();
+    const brands = await BrandModel.findAll();
     res.json(brands);
   } catch (error) {
     console.error("Erro ao buscar marcas:", error);
@@ -16,7 +16,7 @@ export const getAllBrands = async (req: Request, res: Response) => {
 export const getBrandById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const brand = await Brand.findByPk(id);
+    const brand = await BrandModel.findByPk(id);
 
     if (!brand) {
       return res.status(404).json({ error: "Marca não encontrada" });
@@ -40,7 +40,7 @@ export const createBrand = async (req: Request, res: Response) => {
     }
 
     // Criar a marca no banco de dados
-    const newBrand = await Brand.create({ name });
+    const newBrand = await BrandModel.create({ name });
 
     res
       .status(201)
@@ -48,5 +48,21 @@ export const createBrand = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Erro ao cadastrar marca:", error);
     res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
+export const deleteBrandById = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  try {
+    const brand = await BrandModel.findByPk(req.params.id);
+    if (!brand) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    await brand.destroy();
+    res.status(200).json({ message: "Category deleted successfully" });
+  } catch (error) {
+    res.status(500).json("Internal server error" + error);
   }
 };
