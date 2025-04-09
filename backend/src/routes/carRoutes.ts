@@ -3,16 +3,16 @@ import {
   getAllCars,
   getCarById,
   createCar,
+  deleteCarById,
 } from "../controllers/carController";
 import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// 🔓 Rotas públicas
 router.get("/cars", getAllCars);
 router.get("/cars/:id", getCarById);
 
-// 🔒 Rota privada (cadastro de carro requer autenticação)
 router.post("/cars", authMiddleware, createCar);
+router.delete("/cars/:id", authMiddleware, deleteCarById);
 
 export default router;

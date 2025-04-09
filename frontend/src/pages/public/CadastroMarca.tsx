@@ -15,7 +15,7 @@ const CadastroMarca: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/brands",
+        "http://localhost:3000/brands",
         {
           name: marca, // ✅ Enviando o nome corretamente
         },

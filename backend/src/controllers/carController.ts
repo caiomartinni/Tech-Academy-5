@@ -82,7 +82,7 @@ export const updateCar = async (
 };
 
 // Deleta um carro
-export const deleteCar = async (
+export const deleteCarById = async (
   req: Request<{ id: string }>,
   res: Response
 ) => {
