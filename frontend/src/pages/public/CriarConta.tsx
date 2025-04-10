@@ -10,6 +10,7 @@ import { cpf } from "cpf-cnpj-validator";
 import api from "../../service/api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import React from "react";
 
 const schema = z
   .object({
