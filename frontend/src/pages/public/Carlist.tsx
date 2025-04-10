@@ -1,16 +1,70 @@
-import React, { useState } from "react";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Container, Row, Col, Spinner } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
-import "./Carlist.css";
-import card2 from "./icons/peugeot-logo-0-1.png";
-import { Link } from "react-router-dom";
+import "./CarList.css";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
-const itemsPerPage = 9; // Número de itens por página
+const itemsPerPage = 9;
 
-const Carlist: React.FC = () => {
+interface Car {
+  id: number;
+  name: string;
+  brandId: number;
+}
+
+interface Brand {
+  id: number;
+  name: string;
+}
+
+const CarList: React.FC = () => {
+  const { brandId } = useParams<{ brandId: string }>();
+  const [filteredCars, setFilteredCars] = useState<Car[]>([]);
+  const [brandName, setBrandName] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalCards = Array.from({ length: 30 }); // Simulação dos cards
-  const totalPages = Math.ceil(totalCards.length / itemsPerPage);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!brandId) return;
+
+    const fetchCarData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const brandResponse = await axios.get<Brand>(
+          `http://localhost:3000/brands/${brandId}`
+        );
+        setBrandName(brandResponse.data.name);
+
+        const carsResponse = await axios.get<Car[]>(
+          "http://localhost:3000/cars"
+        );
+
+        const brandIdNumber = parseInt(brandId, 10);
+        const carsForBrand = carsResponse.data.filter(
+          (car) => car.brandId === brandIdNumber
+        );
+
+        setFilteredCars(carsForBrand);
+        setCurrentPage(1);
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+        setError(
+          "Falha ao carregar os carros. Verifique o ID da marca ou tente novamente."
+        );
+        setBrandName("");
+        setFilteredCars([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCarData();
+  }, [brandId]);
+
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) =>
@@ -22,87 +76,119 @@ const Carlist: React.FC = () => {
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
   };
 
-  const paginatedCards = totalCards.slice(
+  const paginatedCars = filteredCars.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
     <Container className="home-container">
-      <h1 className="escrita1">Carros</h1>
+      <h1 className="escrita1">
+        {brandName ? `Carros da ${brandName}` : "Lista de Carros"}
+      </h1>
 
-      <AnimatePresence mode="wait">
-        <Row key={currentPage} className="card-grid">
-          {paginatedCards.map((_, index) => (
-            <Col key={index} md={4} className="card-column">
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
+      {loading && (
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Carregando...</span>
+          </Spinner>
+          <p>Carregando carros...</p>
+        </div>
+      )}
+      {error && (
+        <p style={{ color: "red" }} className="text-center">
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && filteredCars.length === 0 && (
+        <p className="text-center">Nenhum carro encontrado para esta marca.</p>
+      )}
+
+      {!loading && !error && filteredCars.length > 0 && (
+        <>
+          <AnimatePresence mode="wait">
+            <Row key={`${brandId}-${currentPage}`} className="card-grid">
+              {paginatedCars.map((car) => (
+                <Col key={car.id} md={4} className="card-column mb-4">
+                  <motion.div
+                    key={car.id}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.5 }}
+                    className="h-100"
+                  >
+                    <Card className="custom-card h-100">
+                      <Card.Img
+                        variant="top"
+                        src={`/images2/${brandId}/${car.id}.png`}
+                        alt={car.name}
+                        style={{ objectFit: "cover", height: "200px" }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "/images2/default.png";
+                        }}
+                      />
+                      <Card.Body className="d-flex flex-column">
+                        <Card.Title>{car.name}</Card.Title>
+                        {/* Link atualizado para passar carId */}
+                        <Link
+                          to={`/pagcar/${car.id}`}
+                          className="cardbt mt-auto"
+                        >
+                          Ver Detalhes
+                        </Link>
+                      </Card.Body>
+                    </Card>
+                  </motion.div>
+                </Col>
+              ))}
+            </Row>
+          </AnimatePresence>
+
+          {totalPages > 1 && (
+            <div className="pagination-container">
+              <Button
+                className="arrow-btn"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
               >
-                <Card className="custom-card">
-                  <Card.Img variant="top" src={card2} />
-                  <Card.Body>
-                    <Card.Title>
-                      Card {(currentPage - 1) * itemsPerPage + index + 1}
-                    </Card.Title>
-                    <Link to={"/pagcar"} className="cardbt">
-                      Ação {(currentPage - 1) * itemsPerPage + index + 1}
-                    </Link>
-                  </Card.Body>
-                </Card>
-              </motion.div>
-            </Col>
-          ))}
-        </Row>
-      </AnimatePresence>
+                &#8592;
+              </Button>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <Button
+                  key={index}
+                  className={`pagination-btn ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                  onClick={() => setCurrentPage(index + 1)}
+                >
+                  {index + 1}
+                </Button>
+              ))}
+              <Button
+                className="arrow-btn"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                &#8594;
+              </Button>
+            </div>
+          )}
+        </>
+      )}
 
-      {/* Controles de Paginação com Setas */}
-      <div className="pagination-container">
-        <Button
-          className="arrow-btn"
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-        >
-          &#8592; {/* Seta para a esquerda */}
-        </Button>
-        {Array.from({ length: totalPages }).map((_, index) => (
-          <Button
-            key={index}
-            className={`pagination-btn ${
-              currentPage === index + 1 ? "active" : ""
-            }`}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </Button>
-        ))}
-        <Button
-          className="arrow-btn"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-        >
-          &#8594; {/* Seta para a direita */}
-        </Button>
-      </div>
-
-      {/* Botão para voltar à página Home */}
       <div
         className="home-button-container"
         style={{ textAlign: "center", marginTop: "20px" }}
       >
-        <Link
-          className="home-button"
-          to="/home"
-          onClick={() => (window.location.href = "/")}
-        >
-          Voltar para Página Home
+        <Link className="home-button" to="/">
+          Voltar para Marcas
         </Link>
       </div>
     </Container>
   );
 };
 
-export default Carlist;
+export default CarList;

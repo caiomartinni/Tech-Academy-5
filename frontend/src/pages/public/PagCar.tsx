@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import "./PagCar.css";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 interface Car {
+  model: ReactNode;
+  id: number;
   name: string;
   image: string;
   description: string;
@@ -10,28 +14,38 @@ interface Car {
   marketValue: number;
   type: string;
   year: number;
+  brandId: number;
 }
 
 const CarDetails = () => {
+  const { carId } = useParams<{ carId: string }>();
   const [car, setCar] = useState<Car | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulando busca de dados (substituir por uma requisição HTTP no futuro)
-    setTimeout(() => {
-      setCar({
-        name: "Fusca",
-        image: "fusca.jpg",
-        description:
-          "O Fusca (Volkswagen Beetle) é um dos carros mais icônicos do mundo. Lançado na Alemanha na década de 1930, ele se tornou extremamente popular devido à sua confiabilidade, simplicidade mecânica e baixo custo de manutenção.",
-        specs: "1.3L, 40cv",
-        marketValue: 25000,
-        type: "Hatch",
-        year: 1975,
-      });
-    }, 1000);
-  }, []);
+    const fetchCarDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get<Car>(
+          `http://localhost:3000/cars/${carId}`
+        );
+        setCar(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar detalhes do carro:", err);
+        setError("Falha ao carregar os detalhes do carro.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!car) return <p>Carregando...</p>;
+    fetchCarDetails();
+  }, [carId]);
+
+  if (loading) return <p>Carregando...</p>;
+  if (error) return <p>Erro: {error}</p>;
+  if (!car) return <p>Carro não encontrado.</p>;
 
   return (
     <Container className="box mt-4">
@@ -41,14 +55,18 @@ const CarDetails = () => {
             <Row>
               <Col md={6} className="text-center">
                 <img
-                  src={car.image}
+                  src={`/images2/${car.brandId}/${car.id}.png`}
                   alt={car.name}
                   className="img-fluid rounded"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/images2/default.png";
+                  }}
                 />
               </Col>
               <Col md={6}>
                 <Card.Body className="BoxCar">
-                  <Card.Title className="fw-bold fs-3">{car.name}</Card.Title>
+                  {/* Título do carro acima da descrição */}
+                  <h2 className="fw-bold fs-3">{car.model}</h2>
                   <Card.Text>
                     <strong className="title">Descrição:</strong>{" "}
                     {car.description}
