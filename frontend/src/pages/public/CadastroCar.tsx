@@ -1,10 +1,27 @@
-import React, { useState, useEffect } from "react";
-import "./CadastroCar.css";
 import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface Carro {
+  id: number;
+  brandId: number;
+  model: string;
+  description?: string;
+  specs?: string;
+  averagePrice?: number;
+  type?: string;
+  year?: number;
+}
+
+interface Marca {
+  id: number;
+  name: string;
+}
 
 const CadastroCar: React.FC = () => {
-  const [marcas, setMarcas] = useState<{ id: number; name: string }[]>([]);
+  const [marcas, setMarcas] = useState<Marca[]>([]);
+  const [carros, setCarros] = useState<Carro[]>([]);
   const [brandId, setBrandId] = useState("");
+  const [selectedCarId, setSelectedCarId] = useState("");
   const [model, setModel] = useState("");
   const [description, setDescription] = useState("");
   const [specs, setSpecs] = useState("");
@@ -12,63 +29,192 @@ const CadastroCar: React.FC = () => {
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [modoEdicao, setModoEdicao] = useState(false);
 
-  // ✅ Buscar todas as marcas
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/brands")
-      .then((response) => {
-        console.log("Marcas carregadas:", response.data);
-        setMarcas(response.data);
-      })
-      .catch((error) => console.error("Erro ao buscar marcas:", error));
+    fetchMarcas();
+    fetchCarros();
   }, []);
 
-  // ✅ Enviar os dados do carro ao backend
+  const fetchMarcas = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/brands");
+      setMarcas(response.data);
+    } catch {
+      console.error("Erro ao buscar marcas");
+    }
+  };
+
+  const fetchCarros = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3000/cars", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCarros(response.data);
+    } catch {
+      console.error("Erro ao buscar carros");
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setMensagem("");
 
+    const token = localStorage.getItem("token");
+
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:3000/cars",
         {
-          brandId,
+          brandId: Number(brandId),
           model,
           description,
           specs,
-          averagePrice,
+          averagePrice: Number(averagePrice),
           type,
-          year,
+          year: Number(year),
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.status === 201) {
         setMensagem("Carro cadastrado com sucesso! 🚀");
-        setBrandId("");
-        setModel("");
-        setDescription("");
-        setSpecs("");
-        setAveragePrice("");
-        setType("");
-        setYear("");
+        limparCampos();
+        fetchCarros();
+      }
+    } catch {
+      setMensagem("Erro ao cadastrar carro. Verifique os dados.");
+    }
+  };
+
+  const handleDeleteCarro = async () => {
+    if (!window.confirm("Deseja realmente excluir este carro?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3000/cars/${selectedCarId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMensagem("Carro excluído com sucesso!");
+      fetchCarros();
+    } catch {
+      setMensagem("Erro ao excluir carro. Tente novamente.");
+    }
+  };
+
+  const handleCarSelect = (carId: string) => {
+    const carroSelecionado = carros.find((carro) => carro.id.toString() === carId);
+    if (carroSelecionado) {
+      setSelectedCarId(carroSelecionado.id.toString());
+      setBrandId(carroSelecionado.brandId?.toString() || "");
+      setModel(carroSelecionado.model);
+      setDescription(carroSelecionado.description || "");
+      setSpecs(carroSelecionado.specs || "");
+      setAveragePrice(carroSelecionado.averagePrice?.toString() || "");
+      setType(carroSelecionado.type || "");
+      setYear(carroSelecionado.year?.toString() || "");
+      setModoEdicao(true);
+    }
+  };
+
+  const handleUpdateCar = async () => {
+    const token = localStorage.getItem("token");
+
+    // Debug para verificar os dados antes do envio
+    console.log("Enviando update:", {
+      brandId: Number(brandId),
+      model,
+      description,
+      specs,
+      averagePrice: Number(averagePrice),
+      type,
+      year: Number(year),
+    });
+
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/cars/${selectedCarId}`,
+        {
+          brandId: Number(brandId),
+          model,
+          description,
+          specs,
+          averagePrice: Number(averagePrice),
+          type,
+          year: Number(year),
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.status === 200) {
+        setMensagem("Carro atualizado com sucesso!");
+        limparCampos();
+        fetchCarros();
+        setModoEdicao(false);
       }
     } catch (error) {
-      setMensagem(
-        "Erro ao cadastrar carro. Verifique os dados e tente novamente."
-      );
-      console.error("Erro:", error);
+      console.error("Erro ao atualizar carro:", error);
+      setMensagem("Erro ao atualizar carro.");
     }
+  };
+
+  const limparCampos = () => {
+    setBrandId("");
+    setModel("");
+    setDescription("");
+    setSpecs("");
+    setAveragePrice("");
+    setType("");
+    setYear("");
+    setSelectedCarId("");
+    setModoEdicao(false);
   };
 
   return (
     <div className="cartalogo-container">
       <h1>Cadastro de Veículos</h1>
       {mensagem && <p>{mensagem}</p>}
+
+      {/* === DELETAR CARRO === */}
+      <div className="delete-car-section">
+        <h2>Deletar Carro</h2>
+        {carros.length > 0 ? (
+          <>
+            <select
+              value={selectedCarId}
+              onChange={(e) => setSelectedCarId(e.target.value)}
+            >
+              {carros.map((carro) => (
+                <option key={carro.id} value={carro.id}>
+                  {carro.model}
+                </option>
+              ))}
+            </select>
+            <button onClick={handleDeleteCarro}>Excluir Carro</button>
+          </>
+        ) : (
+          <p>Nenhum carro cadastrado.</p>
+        )}
+      </div>
+
+      {/* === ATUALIZAR CARRO === */}
+      <div className="update-car-section">
+        <h2>Atualizar Carro</h2>
+        <select
+          onChange={(e) => handleCarSelect(e.target.value)}
+          defaultValue=""
+        >
+          <option value="">Selecione um carro</option>
+          {carros.map((carro) => (
+            <option key={carro.id} value={carro.id}>
+              {carro.model}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* === FORMULÁRIO === */}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="brand">Marca:</label>
@@ -79,15 +225,11 @@ const CadastroCar: React.FC = () => {
             required
           >
             <option value="">Selecione a marca</option>
-            {marcas.length > 0 ? (
-              marcas.map((marca) => (
-                <option key={marca.id} value={marca.id}>
-                  {marca.name}
-                </option>
-              ))
-            ) : (
-              <option disabled>Nenhuma marca encontrada</option>
-            )}
+            {marcas.map((marca) => (
+              <option key={marca.id} value={marca.id}>
+                {marca.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -157,7 +299,13 @@ const CadastroCar: React.FC = () => {
           />
         </div>
 
-        <button type="submit">Cadastrar</button>
+        {modoEdicao ? (
+          <button type="button" onClick={handleUpdateCar}>
+            Atualizar Carro
+          </button>
+        ) : (
+          <button type="submit">Cadastrar</button>
+        )}
       </form>
     </div>
   );
