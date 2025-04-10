@@ -3,8 +3,19 @@ import UserModel from "../models/UserModel";
 
 class UserController {
   async getAllUsers(req: Request, res: Response) {
-    const users = await UserModel.findAll();
-    res.status(200).json(users);
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
+
+    const users = await UserModel.findAndCountAll({
+      limit: parseInt(limit as string),
+      offset,
+    });
+
+    res.status(200).json({
+      total: users.count,
+      pages: Math.ceil(users.count / parseInt(limit as string)),
+      data: users.rows,
+    });
   }
 
   async getUserById(req: Request<{ id: string }>, res: Response) {
@@ -36,19 +47,28 @@ class UserController {
 
   async updateUser(req: Request<{ id: string }>, res: Response) {
     try {
-      const { name, email, password } = req.body;
+      const { id } = req.params;
+      const { user } = req.body; // Usuário autenticado
+      if (parseInt(id) !== user.id) {
+        return res.status(403).json({ error: "You can only edit your own profile" });
+      }
 
-      const user = await UserModel.findByPk(req.params.id);
-      if (!user) {
+      const { name, password, email } = req.body;
+
+      const userToUpdate = await UserModel.findByPk(id);
+      if (!userToUpdate) {
         return res.status(404).json({ error: "User not found" });
       }
 
-      user.name = name || user.name;
-      user.email = email || user.email;
-      user.password = password || user.password;
+      if (email && email !== userToUpdate.email) {
+        return res.status(400).json({ error: "Email cannot be changed" });
+      }
 
-      await user.save();
-      res.status(200).json(user);
+      userToUpdate.name = name || userToUpdate.name;
+      userToUpdate.password = password || userToUpdate.password;
+
+      await userToUpdate.save();
+      res.status(200).json(userToUpdate);
     } catch (error) {
       res.status(500).json({ error: "Internal server error: " + error });
     }
