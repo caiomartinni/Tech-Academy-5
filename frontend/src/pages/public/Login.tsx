@@ -66,7 +66,7 @@ function Login() {
           <h1>Login</h1>
 
           <div className="input-box">
-            <input type="text" placeholder="Usuário" {...register("usuario")} />
+            <input type="text" placeholder="E-mail" {...register("usuario")} />
             <FaUser className="icon" />
             {errors.usuario && (
               <p className="error">{errors.usuario.message}</p>

@@ -42,8 +42,6 @@ const AccountPage = () => {
     }
   };
 
- // ======================================================================================
-
   const handleChangePassword = async () => {
     if (!password) {
       alert("Por favor, insira uma nova senha.");
@@ -57,9 +55,8 @@ const AccountPage = () => {
         return;
       }
 
-      // Realiza o PUT para atualizar a senha
       await api.put(`/users/${userId}`, {
-        password, // Envia a nova senha no corpo da requisição
+        password,
       });
 
       alert("Senha trocada com sucesso!");
@@ -68,6 +65,32 @@ const AccountPage = () => {
       alert(
         axios.isAxiosError(error)
           ? error?.response?.data || "Erro ao atualizar a senha."
+          : "Erro desconhecido."
+      );
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita."
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("Usuário não encontrado.");
+        return;
+      }
+
+      await api.delete(`/users/${userId}`);
+      alert("Conta excluída com sucesso!");
+      logout();
+    } catch (error) {
+      alert(
+        axios.isAxiosError(error)
+          ? error?.response?.data || "Erro ao excluir a conta."
           : "Erro desconhecido."
       );
     }
@@ -83,8 +106,6 @@ const AccountPage = () => {
       </div>
     );
   }
-
-  // ======================================================================================
 
   return (
     <main>
@@ -123,6 +144,9 @@ const AccountPage = () => {
           </button>
           <button className="logout-button" onClick={logout}>
             Deslogar
+          </button>
+          <button className="delete-account-button" onClick={handleDeleteAccount}>
+            Excluir Conta
           </button>
         </div>
       </div>
