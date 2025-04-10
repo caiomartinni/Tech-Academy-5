@@ -7,13 +7,14 @@ import {
   updateBrandById,
 } from "../controllers/brandController";
 import { authMiddleware } from "../middleware/authMiddleware";
+import { validateBrand } from "../middleware/validationMiddleware";
 
 const router = express.Router();
 
 router.get("/brands", getAllBrands);
 router.get("/brands/:id", getBrandById);
-router.put("/brands/:id", updateBrandById);
-router.post("/brands", authMiddleware, createBrand);
+router.put("/brands/:id", validateBrand, updateBrandById);
+router.post("/brands", authMiddleware, validateBrand, createBrand);
 router.delete("/brands/:id", authMiddleware, deleteBrandById);
 
 export default router;

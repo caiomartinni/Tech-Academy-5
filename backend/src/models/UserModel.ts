@@ -19,20 +19,24 @@ class UserModel extends Model {
   }
 
   public static validateCPF(cpf: string): boolean {
-    cpf = cpf.replace(/\D/g, "");
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-    const calcDV = (slice: number): number => {
-      let sum = 0;
-      for (let i = 0; i < slice; i++) {
-        sum += parseInt(cpf[i]) * (slice + 1 - i);
-      }
-      let remainder = sum % 11;
-      return remainder < 2 ? 0 : 11 - remainder;
-    };
-
-    return calcDV(9) === parseInt(cpf[9]) && calcDV(10) === parseInt(cpf[10]);
+    return validateCPF(cpf);
   }
 }
+
+export const validateCPF = (cpf: string): boolean => {
+  cpf = cpf.replace(/\D/g, "");
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  const calcDV = (slice: number): number => {
+    let sum = 0;
+    for (let i = 0; i < slice; i++) {
+      sum += parseInt(cpf[i]) * (slice + 1 - i);
+    }
+    let remainder = sum % 11;
+    return remainder < 2 ? 0 : 11 - remainder;
+  };
+
+  return calcDV(9) === parseInt(cpf[9]) && calcDV(10) === parseInt(cpf[10]);
+};
 
 UserModel.init(
   {
