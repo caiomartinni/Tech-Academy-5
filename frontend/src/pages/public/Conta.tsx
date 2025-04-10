@@ -12,6 +12,8 @@ interface User {
 
 const AccountPage = () => {
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState("");
   const { logout } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,10 @@ const AccountPage = () => {
   useEffect(() => {
     getUser();
   }, []);
+
+  useEffect(() => {
+    setPasswordStrength(getPasswordStrength(password));
+  }, [password]);
 
   const getUser = async () => {
     setLoading(true);
@@ -42,9 +48,26 @@ const AccountPage = () => {
     }
   };
 
+  const getPasswordStrength = (pass: string) => {
+    if (pass.length < 6) return "Fraca";
+    if (/^[a-zA-Z0-9]*$/.test(pass)) return "Média";
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pass)) return "Forte";
+    return "";
+  };
+
   const handleChangePassword = async () => {
-    if (!password) {
-      alert("Por favor, insira uma nova senha.");
+    if (!password || !confirmPassword) {
+      alert("Por favor, preencha os dois campos de senha.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("As senhas não coincidem.");
+      return;
+    }
+
+    if (passwordStrength === "Fraca") {
+      alert("A senha está muito fraca. Use pelo menos 6 caracteres e símbolos.");
       return;
     }
 
@@ -61,6 +84,7 @@ const AccountPage = () => {
 
       alert("Senha trocada com sucesso!");
       setPassword("");
+      setConfirmPassword("");
     } catch (error) {
       alert(
         axios.isAxiosError(error)
@@ -113,15 +137,9 @@ const AccountPage = () => {
         <h1>Informações da Conta</h1>
         {user ? (
           <div className="user-info">
-            <p>
-              <strong>Nome:</strong> {user.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {user.email}
-            </p>
-            <p>
-              <strong>CPF:</strong> {user.cpf}
-            </p>
+            <p><strong>Nome:</strong> {user.name}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>CPF:</strong> {user.cpf}</p>
           </div>
         ) : (
           <p>Usuário não encontrado.</p>
@@ -135,6 +153,31 @@ const AccountPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             aria-label="Nova senha"
           />
+          <input
+            type="password"
+            placeholder="Confirmar nova senha"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            aria-label="Confirmar nova senha"
+            style={{ marginTop: "8px" }}
+          />
+          <div className="password-strength">
+            <p>
+              Força da senha:{" "}
+              <strong
+                style={{
+                  color:
+                    passwordStrength === "Forte"
+                      ? "green"
+                      : passwordStrength === "Média"
+                      ? "orange"
+                      : "red",
+                }}
+              >
+                {passwordStrength}
+              </strong>
+            </p>
+          </div>
           <button
             style={{ marginBottom: "10px" }}
             className="change-password-button"
