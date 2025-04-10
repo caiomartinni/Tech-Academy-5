@@ -8,7 +8,7 @@ import LayoutLogin from "./components/layout/LayoutLogin";
 import BackgroudLogin from "./assets/backgrod/backgroud.webp";
 import LayoutHome from "./components/layout/layouthome";
 import RecuperarSenha from "./pages/public/RecuperarSenha";
-import CarList from "./pages/public/Carlist";
+import CarList from "./pages/public/CarList";
 import Conta from "./pages/public/Conta";
 import PagCar from "./pages/public/PagCar";
 import Polpriv from "./pages/public/Polpriv";

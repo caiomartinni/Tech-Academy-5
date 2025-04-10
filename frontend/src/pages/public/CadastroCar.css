@@ -9,6 +9,8 @@
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px);
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 h1 {
@@ -24,6 +26,7 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: white;
 }
 
 input,
@@ -47,4 +50,8 @@ button {
 button:hover {
   background-color: white;
   color: #ffcc00;
+}
+
+.btnex {
+  margin-top: 10px;
 }

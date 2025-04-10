@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { Card, Button, Container, Row, Col, Spinner } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import "./CarList.css";
@@ -8,6 +8,7 @@ import axios from "axios";
 const itemsPerPage = 9;
 
 interface Car {
+  model: ReactNode;
   id: number;
   name: string;
   brandId: number;
@@ -131,7 +132,7 @@ const CarList: React.FC = () => {
                         }}
                       />
                       <Card.Body className="d-flex flex-column">
-                        <Card.Title>{car.name}</Card.Title>
+                        <Card.Title>{car.model}</Card.Title>
                         {/* Link atualizado para passar carId */}
                         <Link
                           to={`/pagcar/${car.id}`}

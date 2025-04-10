@@ -21,7 +21,7 @@ h1 {
 
 label {
   display: block;
-  font-weight: bold;
+  font-size: 30px;
   margin-bottom: 5px;
 }
 
@@ -45,4 +45,26 @@ button {
 button:hover {
   background-color: white;
   color: #ffcc00;
+}
+
+.btnex {
+  margin-top: 15px;
+}
+
+.novomarca {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.nomemarca {
+  display: block;
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+h2 {
+  display: block;
+  font-size: 30px;
+  margin-bottom: 5px;
+  font-weight: bold;
 }

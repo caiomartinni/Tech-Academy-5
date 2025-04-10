@@ -63,13 +63,17 @@ const CadastroMarca: React.FC = () => {
         fetchBrands();
       }
     } catch (error) {
-      setMensagem("Erro ao cadastrar marca. Verifique os dados e tente novamente.");
+      setMensagem(
+        "Erro ao cadastrar marca. Verifique os dados e tente novamente."
+      );
       console.error("Erro:", error);
     }
   };
 
   const handleDeleteBrand = async () => {
-    const confirmDelete = window.confirm("Tem certeza que deseja excluir essa marca?");
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir essa marca?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -123,14 +127,19 @@ const CadastroMarca: React.FC = () => {
         <h2>Deletar Marca</h2>
         {brands && brands.length > 0 ? (
           <>
-            <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
+            <select
+              value={selectedBrand}
+              onChange={(e) => setSelectedBrand(e.target.value)}
+            >
               {brands.map((brand) => (
                 <option key={brand.id} value={brand.id}>
                   {brand.name}
                 </option>
               ))}
             </select>
-            <button onClick={handleDeleteBrand}>Excluir Marca</button>
+            <button className="btnex" onClick={handleDeleteBrand}>
+              Excluir Marca
+            </button>
           </>
         ) : (
           <p>Nenhuma marca cadastrada.</p>
@@ -142,7 +151,10 @@ const CadastroMarca: React.FC = () => {
         <h2>Atualizar Nome da Marca</h2>
         {brands && brands.length > 0 ? (
           <>
-            <select value={editBrandId} onChange={(e) => setEditBrandId(e.target.value)}>
+            <select
+              value={editBrandId}
+              onChange={(e) => setEditBrandId(e.target.value)}
+            >
               {brands.map((brand) => (
                 <option key={brand.id} value={brand.id}>
                   {brand.name}
@@ -150,6 +162,7 @@ const CadastroMarca: React.FC = () => {
               ))}
             </select>
             <input
+              className="novomarca"
               type="text"
               placeholder="Novo nome da marca"
               value={novoNomeMarca}
@@ -165,7 +178,9 @@ const CadastroMarca: React.FC = () => {
       {/* Cadastro */}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="marca">Nome da Marca:</label>
+          <label className="nomemarca" htmlFor="marca">
+            Cadastrar Marca:
+          </label>
           <input
             id="marca"
             type="text"

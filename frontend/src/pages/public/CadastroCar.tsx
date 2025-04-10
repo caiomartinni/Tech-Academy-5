@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "./CadastroCar.css";
 
 interface Carro {
   id: number;
@@ -104,7 +105,9 @@ const CadastroCar: React.FC = () => {
   };
 
   const handleCarSelect = (carId: string) => {
-    const carroSelecionado = carros.find((carro) => carro.id.toString() === carId);
+    const carroSelecionado = carros.find(
+      (carro) => carro.id.toString() === carId
+    );
     if (carroSelecionado) {
       setSelectedCarId(carroSelecionado.id.toString());
       setBrandId(carroSelecionado.brandId?.toString() || "");
@@ -191,7 +194,9 @@ const CadastroCar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <button onClick={handleDeleteCarro}>Excluir Carro</button>
+            <button className="btnex" onClick={handleDeleteCarro}>
+              Excluir Carro
+            </button>
           </>
         ) : (
           <p>Nenhum carro cadastrado.</p>
