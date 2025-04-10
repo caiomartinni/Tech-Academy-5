@@ -19,9 +19,8 @@ class UserModel extends Model {
   }
 
   public static validateCPF(cpf: string): boolean {
-    cpf = cpf.replace(/\D/g, ""); // Remove caracteres não numéricos
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // Impede CPFs inválidos
-
+    cpf = cpf.replace(/\D/g, "");
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
     const calcDV = (slice: number): number => {
       let sum = 0;
       for (let i = 0; i < slice; i++) {

@@ -133,7 +133,7 @@ const CarList: React.FC = () => {
                       />
                       <Card.Body className="d-flex flex-column">
                         <Card.Title>{car.model}</Card.Title>
-                        {/* Link atualizado para passar carId */}
+                        {}
                         <Link
                           to={`/pagcar/${car.id}`}
                           className="cardbt mt-auto"

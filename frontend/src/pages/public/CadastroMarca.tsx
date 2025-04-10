@@ -58,7 +58,7 @@ const CadastroMarca: React.FC = () => {
       );
 
       if (response.status === 201) {
-        setMensagem("Marca cadastrada com sucesso! 🚀");
+        setMensagem("Marca cadastrada com sucesso!");
         setMarca("");
         fetchBrands();
       }
@@ -108,7 +108,7 @@ const CadastroMarca: React.FC = () => {
           },
         }
       );
-      setMensagem("Marca atualizada com sucesso! ✨");
+      setMensagem("Marca atualizada com sucesso!");
       setNovoNomeMarca("");
       fetchBrands();
     } catch (error) {
@@ -122,7 +122,7 @@ const CadastroMarca: React.FC = () => {
       <h1>Cadastro de Marcas</h1>
       {mensagem && <p>{mensagem}</p>}
 
-      {/* Seção de exclusão */}
+      {}
       <div className="delete-brand-section">
         <h2>Deletar Marca</h2>
         {brands && brands.length > 0 ? (
@@ -146,7 +146,7 @@ const CadastroMarca: React.FC = () => {
         )}
       </div>
 
-      {/* Seção de atualização */}
+      {}
       <div className="update-brand-section">
         <h2>Atualizar Nome da Marca</h2>
         {brands && brands.length > 0 ? (
@@ -175,7 +175,7 @@ const CadastroMarca: React.FC = () => {
         )}
       </div>
 
-      {/* Cadastro */}
+      {}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="nomemarca" htmlFor="marca">

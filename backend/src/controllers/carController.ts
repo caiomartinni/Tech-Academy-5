@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import CarModel from "../models/CarModel";
 
-// Busca todos os carros
 export const getAllCars = async (req: Request, res: Response) => {
   const cars = await CarModel.findAll();
   res.send(cars);
 };
 
-// Busca um carro por ID
 export const getCarById = async (
   req: Request<{ id: string }>,
   res: Response
@@ -19,7 +17,6 @@ export const getCarById = async (
   res.json(car);
 };
 
-// Cria um novo carro
 export const createCar = async (req: Request, res: Response) => {
   try {
     const { model, description, specs, averagePrice, type, year, brandId } =
@@ -52,7 +49,6 @@ export const createCar = async (req: Request, res: Response) => {
   }
 };
 
-// Atualiza um carro
 export const updateCar = async (
   req: Request<{ id: string }>,
   res: Response
@@ -81,7 +77,6 @@ export const updateCar = async (
   }
 };
 
-// Deleta um carro
 export const deleteCarById = async (
   req: Request<{ id: string }>,
   res: Response

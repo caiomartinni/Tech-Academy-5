@@ -9,24 +9,20 @@ import loginRoutes from "./routes/loginRoutes";
 const app = express();
 const port = 3000;
 
-// Middlewares
-app.use(cors()); // Permite acesso externo
+app.use(cors());
 app.use(express.json());
 
-// Rotas
 app.use(loginRoutes);
 app.use(userRoutes);
 app.use(carRoutes);
 app.use(brandRoutes);
 
-// Rota de teste
 app.get("/", (req, res) => {
   res.send("API funcionando! 🚀");
 });
 
-// Sincroniza o banco de dados
 sequelize
-  .sync({ alter: true }) // alter mantém as tabelas atualizadas sem perder dados
+  .sync({ alter: true })
   .then(() => {
     console.log("Banco de dados sincronizado com sucesso!");
   })

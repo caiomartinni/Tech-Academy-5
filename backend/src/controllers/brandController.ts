@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import BrandModel from "../models/BrandModel";
 
-// 🔎 Buscar todas as marcas
 export const getAllBrands = async (req: Request, res: Response) => {
   try {
     const brands = await BrandModel.findAll();
@@ -12,7 +11,6 @@ export const getAllBrands = async (req: Request, res: Response) => {
   }
 };
 
-// 🔎 Buscar uma marca por ID
 export const getBrandById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -29,7 +27,6 @@ export const getBrandById = async (req: Request, res: Response) => {
   }
 };
 
-// ✨ Criar uma nova marca
 export const createBrand = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
@@ -49,7 +46,6 @@ export const createBrand = async (req: Request, res: Response) => {
   }
 };
 
-// ❌ Deletar marca por ID
 export const deleteBrandById = async (
   req: Request<{ id: string }>,
   res: Response
@@ -66,7 +62,6 @@ export const deleteBrandById = async (
   }
 };
 
-// 🔁 Atualizar marca por ID
 export const updateBrandById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -91,4 +86,3 @@ export const updateBrandById = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
-

@@ -6,7 +6,7 @@ class CarModel extends Model {
   id!: number;
   model!: string;
   description!: string;
-  specs!: string; // Informações do motor e cavalaria separadas por vírgula
+  specs!: string;
   averagePrice!: number;
   type!: string;
   year!: number;
@@ -30,7 +30,7 @@ CarModel.init(
     },
     specs: {
       type: DataTypes.STRING,
-      allowNull: false, // Exemplo: "V8 4.0 Turbo, 600 HP"
+      allowNull: false,
     },
     averagePrice: {
       type: DataTypes.FLOAT,
@@ -56,13 +56,11 @@ CarModel.init(
   }
 );
 
-// Relacionamento: cada carro pertence a uma marca
 CarModel.belongsTo(BrandModel, {
   foreignKey: "brandId",
   as: "brand",
 });
 
-// Uma marca pode ter vários carros
 BrandModel.hasMany(CarModel, {
   foreignKey: "brandId",
   as: "cars",

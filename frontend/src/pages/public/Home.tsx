@@ -5,26 +5,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./Home.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import teste from "./icons/teste.webp"; // Mantenha se usar, ou remova/substitua
+import teste from "./icons/teste.webp";
 
 const itemsPerPage = 6;
 
 interface Brand {
-  id: number; // Assumindo que o ID da API é numérico
+  id: number;
   name: string;
 }
 
 const Home: React.FC = () => {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true); // Estado de loading
-  const [error, setError] = useState<string | null>(null); // Estado de erro
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
     axios
-      .get<Brand[]>("http://localhost:3000/brands") // Especifica o tipo de retorno esperado
+      .get<Brand[]>("http://localhost:3000/brands")
       .then((response) => {
         setBrands(response.data);
         setLoading(false);
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
 
   return (
     <Container className="home-container">
-      {/* Carrossel */}
+      {}
       <h1 className="escrita1">Carros em Destaque</h1>
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
       >
         <Carousel className="carousel-container">
           <Carousel.Item>
-            {/* Idealmente, use imagens de carros reais aqui */}
+            {}
             <img className="d-block w-100" src={teste} alt="Destaque 1" />
           </Carousel.Item>
           <Carousel.Item>
@@ -73,10 +73,8 @@ const Home: React.FC = () => {
         </Carousel>
       </motion.div>
 
-      {/* Grid de Marcas com Paginação */}
       <h1 className="escrita1">Marcas</h1>
 
-      {/* Feedback de Loading e Erro */}
       {loading && <p>Carregando marcas...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 

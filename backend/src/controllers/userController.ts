@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import UserModel from "../models/UserModel";
 
-// Busca todos os usuários
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await UserModel.findAll();
   res.send(users);
 };
 
-// Busca um usuário por ID
 export const getUserById = async (
   req: Request<{ id: string }>,
   res: Response
@@ -19,7 +17,6 @@ export const getUserById = async (
   res.json(user);
 };
 
-// Cria um novo usuário
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, cpf } = req.body;
@@ -39,7 +36,6 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-// Atualiza um usuário
 export const updateUser = async (
   req: Request<{ id: string }>,
   res: Response
@@ -63,7 +59,6 @@ export const updateUser = async (
   }
 };
 
-// Deleta um usuário
 export const deleteUser = async (
   req: Request<{ id: string }>,
   res: Response

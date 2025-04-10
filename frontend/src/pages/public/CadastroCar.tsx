@@ -124,7 +124,6 @@ const CadastroCar: React.FC = () => {
   const handleUpdateCar = async () => {
     const token = localStorage.getItem("token");
 
-    // Debug para verificar os dados antes do envio
     console.log("Enviando update:", {
       brandId: Number(brandId),
       model,
@@ -179,7 +178,7 @@ const CadastroCar: React.FC = () => {
       <h1>Cadastro de Veículos</h1>
       {mensagem && <p>{mensagem}</p>}
 
-      {/* === DELETAR CARRO === */}
+      {}
       <div className="delete-car-section">
         <h2>Deletar Carro</h2>
         {carros.length > 0 ? (
@@ -203,7 +202,7 @@ const CadastroCar: React.FC = () => {
         )}
       </div>
 
-      {/* === ATUALIZAR CARRO === */}
+      {}
       <div className="update-car-section">
         <h2>Atualizar Carro</h2>
         <select
@@ -219,7 +218,7 @@ const CadastroCar: React.FC = () => {
         </select>
       </div>
 
-      {/* === FORMULÁRIO === */}
+      {}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="brand">Marca:</label>
