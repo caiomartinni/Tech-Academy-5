@@ -89,40 +89,31 @@ const Home: React.FC = () => {
               {paginatedBrands.map((brand) => (
                 <Col key={brand.id} md={4} className="card-column mb-4">
                   {" "}
-                  {/* Adicionado mb-4 para espaçamento */}
                   <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="h-100" // Garante que a animação ocupe a altura da coluna
+                    className="h-100"
                   >
                     <Card className="custom-card h-100">
                       {" "}
-                      {/* Adicionado h-100 para cards terem mesma altura */}
-                      {/* Usando /images/ assumindo que 'public' é a raiz do servidor */}
                       <Card.Img
                         variant="top"
                         src={`/images/${brand.id}.png`}
                         alt={brand.name}
                         style={{ objectFit: "contain", height: "150px" }}
                       />{" "}
-                      {/* Ajuste de estilo opcional */}
                       <Card.Body className="d-flex flex-column">
                         {" "}
-                        {/* Flex column para alinhar botão */}
                         <Card.Title>{brand.name}</Card.Title>
-                        {/* === ALTERAÇÃO PRINCIPAL AQUI === */}
-                        {/* Link aponta para /cars/ passando o ID da marca */}
                         <Link
                           to={`/cars/${brand.id}`}
                           className="cardbt mt-auto"
                         >
                           {" "}
-                          {/* mt-auto empurra o botão para baixo */}
                           Ver Carros
                         </Link>
-                        {/* ================================ */}
                       </Card.Body>
                     </Card>
                   </motion.div>
@@ -131,7 +122,6 @@ const Home: React.FC = () => {
             </Row>
           </AnimatePresence>
 
-          {/* Controles de Paginação (só mostrar se houver mais de 1 página) */}
           {totalPages > 1 && (
             <div className="pagination-container">
               <Button

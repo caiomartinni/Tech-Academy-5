@@ -8,7 +8,7 @@ import "./Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import api from "../../service/api";
-import { useAuth } from "../../context/AuthContext"; // Importa o contexto de autenticação
+import { useAuth } from "../../context/AuthContext";
 
 const schema = z.object({
   usuario: z.string().min(3, "O usuário deve ter pelo menos 3 caracteres"),
@@ -27,15 +27,12 @@ function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth(); // Usa a função login do contexto
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-
-  // ======================================================================================
-
 
   const handleLogin = async (data: { usuario: string; senha: string }) => {
     try {
@@ -45,7 +42,7 @@ function Login() {
       });
 
       const { token } = response.data;
-      login(token); // Chama a função login do contexto
+      login(token);
       alert("Login realizado com sucesso!");
       navigate("/home");
       location.reload();
@@ -56,8 +53,6 @@ function Login() {
       }
     }
   };
-
-  // ======================================================================================
 
   return (
     <div className="center">

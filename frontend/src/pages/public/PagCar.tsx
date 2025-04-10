@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 interface Car {
+  averagePrice: ReactNode;
   model: ReactNode;
   id: number;
   name: string;
@@ -55,7 +56,7 @@ const CarDetails = () => {
             <Row>
               <Col md={6} className="text-center">
                 <img
-                  src={`/images2/${car.brandId}/${car.id}.png`}
+                  src={`/images2/${car.brandId}/${car.id}.jpg`}
                   alt={car.name}
                   className="img-fluid rounded"
                   onError={(e) => {
@@ -65,7 +66,6 @@ const CarDetails = () => {
               </Col>
               <Col md={6}>
                 <Card.Body className="BoxCar">
-                  {/* Título do carro acima da descrição */}
                   <h2 className="fw-bold fs-3">{car.model}</h2>
                   <Card.Text>
                     <strong className="title">Descrição:</strong>{" "}
@@ -77,7 +77,7 @@ const CarDetails = () => {
                   </Card.Text>
                   <Card.Text>
                     <strong className="title">Valor Médio:</strong> R${" "}
-                    {car.marketValue}
+                    {car.averagePrice}
                   </Card.Text>
                   <Card.Text>
                     <strong className="title">Tipo do Veículo:</strong>{" "}

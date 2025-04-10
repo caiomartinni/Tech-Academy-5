@@ -11,7 +11,6 @@ import api from "../../service/api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Validação com zod + CPF e confirmação de senha
 const schema = z
   .object({
     nomeUsuario: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),

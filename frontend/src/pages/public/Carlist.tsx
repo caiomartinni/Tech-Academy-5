@@ -123,7 +123,7 @@ const CarList: React.FC = () => {
                     <Card className="custom-card h-100">
                       <Card.Img
                         variant="top"
-                        src={`/images2/${brandId}/${car.id}.png`}
+                        src={`/images2/${brandId}/${car.id}.jpg`}
                         alt={car.name}
                         style={{ objectFit: "cover", height: "200px" }}
                         onError={(e) => {
