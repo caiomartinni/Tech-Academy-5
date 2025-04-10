@@ -34,12 +34,10 @@ export const createBrand = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
 
-    // Validação: Garante que o nome foi enviado
     if (!name) {
       return res.status(400).json({ error: "O campo 'name' é obrigatório" });
     }
 
-    // Criar a marca no banco de dados
     const newBrand = await BrandModel.create({ name });
 
     res
@@ -51,6 +49,7 @@ export const createBrand = async (req: Request, res: Response) => {
   }
 };
 
+// ❌ Deletar marca por ID
 export const deleteBrandById = async (
   req: Request<{ id: string }>,
   res: Response
@@ -58,11 +57,38 @@ export const deleteBrandById = async (
   try {
     const brand = await BrandModel.findByPk(req.params.id);
     if (!brand) {
-      return res.status(404).json({ error: "Category not found" });
+      return res.status(404).json({ error: "Marca não encontrada" });
     }
     await brand.destroy();
-    res.status(200).json({ message: "Category deleted successfully" });
+    res.status(200).json({ message: "Marca excluída com sucesso!" });
   } catch (error) {
-    res.status(500).json("Internal server error" + error);
+    res.status(500).json({ error: "Erro interno do servidor: " + error });
   }
 };
+
+// 🔁 Atualizar marca por ID
+export const updateBrandById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: "O campo 'name' é obrigatório" });
+    }
+
+    const brand = await BrandModel.findByPk(id);
+
+    if (!brand) {
+      return res.status(404).json({ error: "Marca não encontrada" });
+    }
+
+    brand.name = name;
+    await brand.save();
+
+    res.status(200).json({ message: "Marca atualizada com sucesso!", brand });
+  } catch (error) {
+    console.error("Erro ao atualizar marca:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
