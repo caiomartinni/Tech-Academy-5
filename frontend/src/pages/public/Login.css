@@ -113,3 +113,21 @@
   font-size: 18px;
   color: #fff;
 }
+
+.cardbt.mt-auto {
+  width: 100px;
+  height: 30px;
+  display: flex;
+  align-items: center;     /* Alinha verticalmente */
+  justify-content: center
+  
+}
+
+.card-title.h5 {
+  text-align: center;
+  color: white;
+}
+
+.card-body {
+  align-items: center;
+}

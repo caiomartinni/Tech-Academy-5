@@ -2,7 +2,6 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Logo from "../../assets/icons/logo.png";
@@ -30,23 +29,6 @@ function Header() {
                   Home
                 </Link>
               </Nav.Link>
-              <Nav.Link href="#action2" className="header-link">
-                Link
-              </Nav.Link>
-              <NavDropdown
-                title="Marcas"
-                id="navbarScrollingDropdown"
-                className="header-dropdown"
-              >
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">
-                  Something else here
-                </NavDropdown.Item>
-              </NavDropdown>
             </Nav>
             <Form className="d-flex">
               {isLoggedIn ? (
@@ -59,8 +41,7 @@ function Header() {
                   </Link>
                   <Link to="/cadastro-marca" className="login-button">
                     Cadastro Marca
-                  </Link>{" "}
-                  {/* ✅ Novo botão */}
+                  </Link>
                 </div>
               ) : (
                 <Link to="/login" className="login-button">
