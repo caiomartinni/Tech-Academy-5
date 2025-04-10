@@ -6,6 +6,9 @@ import "./Home.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import teste from "./icons/teste.webp";
+import titano from "./icons/titano.jpg";
+import king from "./icons/king.jpg";
+import bmw from "./icons/bmw.jpg";
 
 const itemsPerPage = 6;
 
@@ -65,10 +68,16 @@ const Home: React.FC = () => {
         <Carousel className="carousel-container">
           <Carousel.Item>
             {}
-            <img className="d-block w-100" src={teste} alt="Destaque 1" />
+            <img className="d-block w-100" src={bmw} alt="Destaque 1" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img className="d-block w-100" src={titano} alt="Destaque 2" />
           </Carousel.Item>
           <Carousel.Item>
             <img className="d-block w-100" src={teste} alt="Destaque 2" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img className="d-block w-100" src={king} alt="Destaque 2" />
           </Carousel.Item>
         </Carousel>
       </motion.div>
