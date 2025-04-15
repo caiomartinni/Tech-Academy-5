@@ -1,6 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./CadastroCar.css";
+import { FaTrashCan } from "react-icons/fa6";
+import { FaPencilAlt } from "react-icons/fa";
+import { GoVersions } from "react-icons/go";
 
 interface Carro {
   id: number;
@@ -21,8 +24,8 @@ interface Marca {
 const CadastroCar: React.FC = () => {
   const [marcas, setMarcas] = useState<Marca[]>([]);
   const [carros, setCarros] = useState<Carro[]>([]);
+  const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
   const [brandId, setBrandId] = useState("");
-  const [selectedCarId, setSelectedCarId] = useState("");
   const [model, setModel] = useState("");
   const [description, setDescription] = useState("");
   const [specs, setSpecs] = useState("");
@@ -30,7 +33,7 @@ const CadastroCar: React.FC = () => {
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
   const [mensagem, setMensagem] = useState("");
-  const [modoEdicao, setModoEdicao] = useState(false);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     fetchMarcas();
@@ -65,36 +68,54 @@ const CadastroCar: React.FC = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/cars",
-        {
-          brandId: Number(brandId),
-          model,
-          description,
-          specs,
-          averagePrice: Number(averagePrice),
-          type,
-          year: Number(year),
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = selectedCarId
+        ? await axios.put(
+            `http://localhost:3000/cars/${selectedCarId}`,
+            {
+              brandId: Number(brandId),
+              model,
+              description,
+              specs,
+              averagePrice: Number(averagePrice),
+              type,
+              year: Number(year),
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+        : await axios.post(
+            "http://localhost:3000/cars",
+            {
+              brandId: Number(brandId),
+              model,
+              description,
+              specs,
+              averagePrice: Number(averagePrice),
+              type,
+              year: Number(year),
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
 
-      if (response.status === 201) {
-        setMensagem("Carro cadastrado com sucesso! 🚀");
+      if (response.status === 200 || response.status === 201) {
+        setMensagem(
+          selectedCarId
+            ? "Carro atualizado com sucesso!"
+            : "Carro cadastrado com sucesso!"
+        );
         limparCampos();
         fetchCarros();
       }
     } catch {
-      setMensagem("Erro ao cadastrar carro. Verifique os dados.");
+      setMensagem("Erro ao salvar carro. Verifique os dados.");
     }
   };
 
-  const handleDeleteCarro = async () => {
+  const handleDeleteCarro = async (id: number) => {
     if (!window.confirm("Deseja realmente excluir este carro?")) return;
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/cars/${selectedCarId}`, {
+      await axios.delete(`http://localhost:3000/cars/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMensagem("Carro excluído com sucesso!");
@@ -104,64 +125,21 @@ const CadastroCar: React.FC = () => {
     }
   };
 
-  const handleCarSelect = (carId: string) => {
-    const carroSelecionado = carros.find(
-      (carro) => carro.id.toString() === carId
-    );
-    if (carroSelecionado) {
-      setSelectedCarId(carroSelecionado.id.toString());
-      setBrandId(carroSelecionado.brandId?.toString() || "");
-      setModel(carroSelecionado.model);
-      setDescription(carroSelecionado.description || "");
-      setSpecs(carroSelecionado.specs || "");
-      setAveragePrice(carroSelecionado.averagePrice?.toString() || "");
-      setType(carroSelecionado.type || "");
-      setYear(carroSelecionado.year?.toString() || "");
-      setModoEdicao(true);
-    }
-  };
+  const handleEditCar = (carro: Carro) => {
+    setSelectedCarId(carro.id);
+    setBrandId(carro.brandId.toString());
+    setModel(carro.model);
+    setDescription(carro.description || "");
+    setSpecs(carro.specs || "");
+    setAveragePrice(carro.averagePrice?.toString() || "");
+    setType(carro.type || "");
+    setYear(carro.year?.toString() || "");
 
-  const handleUpdateCar = async () => {
-    const token = localStorage.getItem("token");
-
-    console.log("Enviando update:", {
-      brandId: Number(brandId),
-      model,
-      description,
-      specs,
-      averagePrice: Number(averagePrice),
-      type,
-      year: Number(year),
-    });
-
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/cars/${selectedCarId}`,
-        {
-          brandId: Number(brandId),
-          model,
-          description,
-          specs,
-          averagePrice: Number(averagePrice),
-          type,
-          year: Number(year),
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.status === 200) {
-        setMensagem("Carro atualizado com sucesso!");
-        limparCampos();
-        fetchCarros();
-        setModoEdicao(false);
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar carro:", error);
-      setMensagem("Erro ao atualizar carro.");
-    }
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const limparCampos = () => {
+    setSelectedCarId(null);
     setBrandId("");
     setModel("");
     setDescription("");
@@ -169,8 +147,6 @@ const CadastroCar: React.FC = () => {
     setAveragePrice("");
     setType("");
     setYear("");
-    setSelectedCarId("");
-    setModoEdicao(false);
   };
 
   return (
@@ -178,139 +154,123 @@ const CadastroCar: React.FC = () => {
       <h1>Cadastro de Veículos</h1>
       {mensagem && <p>{mensagem}</p>}
 
-      {}
-      <div className="delete-car-section">
-        <h2>Deletar Carro</h2>
-        {carros.length > 0 ? (
-          <>
+      <div ref={formRef}>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="brand">Marca:</label>
             <select
-              value={selectedCarId}
-              onChange={(e) => setSelectedCarId(e.target.value)}
+              id="brand"
+              value={brandId}
+              onChange={(e) => setBrandId(e.target.value)}
+              required
             >
-              {carros.map((carro) => (
-                <option key={carro.id} value={carro.id}>
-                  {carro.model}
+              <option value="">Selecione a marca</option>
+              {marcas.map((marca) => (
+                <option key={marca.id} value={marca.id}>
+                  {marca.name}
                 </option>
               ))}
             </select>
-            <button className="btnex" onClick={handleDeleteCarro}>
-              Excluir Carro
-            </button>
-          </>
-        ) : (
-          <p>Nenhum carro cadastrado.</p>
-        )}
-      </div>
-
-      {}
-      <div className="update-car-section">
-        <h2>Atualizar Carro</h2>
-        <select
-          onChange={(e) => handleCarSelect(e.target.value)}
-          defaultValue=""
-        >
-          <option value="">Selecione um carro</option>
-          {carros.map((carro) => (
-            <option key={carro.id} value={carro.id}>
-              {carro.model}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="brand">Marca:</label>
-          <select
-            id="brand"
-            value={brandId}
-            onChange={(e) => setBrandId(e.target.value)}
-            required
-          >
-            <option value="">Selecione a marca</option>
-            {marcas.map((marca) => (
-              <option key={marca.id} value={marca.id}>
-                {marca.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="model">Modelo:</label>
-          <input
-            id="model"
-            type="text"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Descrição:</label>
-          <input
-            id="description"
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="specs">Especificações:</label>
-          <input
-            id="specs"
-            type="text"
-            value={specs}
-            onChange={(e) => setSpecs(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="averagePrice">Preço Médio:</label>
-          <input
-            id="averagePrice"
-            type="number"
-            value={averagePrice}
-            onChange={(e) => setAveragePrice(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="type">Tipo:</label>
-          <input
-            id="type"
-            type="text"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="year">Ano:</label>
-          <input
-            id="year"
-            type="number"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            required
-          />
-        </div>
-
-        {modoEdicao ? (
-          <button type="button" onClick={handleUpdateCar}>
-            Atualizar Carro
+          </div>
+          <div className="form-group">
+            <label htmlFor="model">Modelo:</label>
+            <input
+              id="model"
+              type="text"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Descrição:</label>
+            <input
+              id="description"
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="specs">Especificações:</label>
+            <input
+              id="specs"
+              type="text"
+              value={specs}
+              onChange={(e) => setSpecs(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="averagePrice">Preço Médio:</label>
+            <input
+              id="averagePrice"
+              type="number"
+              value={averagePrice}
+              onChange={(e) => setAveragePrice(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="type">Tipo:</label>
+            <input
+              id="type"
+              type="text"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="year">Ano:</label>
+            <input
+              id="year"
+              type="number"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            />
+          </div>
+          <button type="submit">
+            {selectedCarId ? "Atualizar Carro" : "Cadastrar Carro"}
           </button>
-        ) : (
-          <button type="submit">Cadastrar</button>
-        )}
-      </form>
+        </form>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome do Carro</th>
+            <th>Marca</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {carros.map((carro) => (
+            <tr key={carro.id}>
+              <td>{carro.id}</td>
+              <td>{carro.model}</td>
+              <td>
+                {marcas.find((marca) => marca.id === carro.brandId)?.name}
+              </td>
+              <td className="action-buttons">
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDeleteCarro(carro.id)}
+                >
+                  <FaTrashCan size={15} /> Excluir
+                </button>
+                <button
+                  className="btn-edit"
+                  onClick={() => handleEditCar(carro)}
+                >
+                  <FaPencilAlt size={15} /> Editar
+                </button>
+                <button className="btn-version">
+                  <GoVersions size={15} /> Versões
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

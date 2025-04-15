@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./CadastroMarca.css";
 import axios from "axios";
+import { FaTrashCan } from "react-icons/fa6";
+import { FaPencilAlt } from "react-icons/fa";
 
 interface Brand {
   id: string;
@@ -9,11 +11,8 @@ interface Brand {
 
 const CadastroMarca: React.FC = () => {
   const [marca, setMarca] = useState("");
-  const [mensagem, setMensagem] = useState("");
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrand, setSelectedBrand] = useState<string>("");
-  const [editBrandId, setEditBrandId] = useState<string>("");
-  const [novoNomeMarca, setNovoNomeMarca] = useState<string>("");
+  const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
     fetchBrands();
@@ -23,18 +22,9 @@ const CadastroMarca: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:3000/brands", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setBrands(response.data);
-      if (response.data.length > 0) {
-        setSelectedBrand(response.data[0].id);
-        setEditBrandId(response.data[0].id);
-      } else {
-        setSelectedBrand("");
-        setEditBrandId("");
-      }
     } catch (error) {
       console.error("Erro ao buscar marcas:", error);
     }
@@ -44,17 +34,12 @@ const CadastroMarca: React.FC = () => {
     event.preventDefault();
     setMensagem("");
 
-    const token = localStorage.getItem("token");
-
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:3000/brands",
         { name: marca },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.status === 201) {
@@ -63,14 +48,12 @@ const CadastroMarca: React.FC = () => {
         fetchBrands();
       }
     } catch (error) {
-      setMensagem(
-        "Erro ao cadastrar marca. Verifique os dados e tente novamente."
-      );
+      setMensagem("Erro ao cadastrar marca. Tente novamente.");
       console.error("Erro:", error);
     }
   };
 
-  const handleDeleteBrand = async () => {
+  const handleDeleteBrand = async (id: string) => {
     const confirmDelete = window.confirm(
       "Tem certeza que deseja excluir essa marca?"
     );
@@ -78,10 +61,8 @@ const CadastroMarca: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/brands/${selectedBrand}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await axios.delete(`http://localhost:3000/brands/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setMensagem("Marca excluída com sucesso!");
       fetchBrands();
@@ -91,25 +72,18 @@ const CadastroMarca: React.FC = () => {
     }
   };
 
-  const handleUpdateBrand = async () => {
-    if (!novoNomeMarca.trim()) {
-      setMensagem("Digite um novo nome válido.");
-      return;
-    }
+  const handleEditBrand = async (id: string, oldName: string) => {
+    const newName = window.prompt("Digite o novo nome da marca:", oldName);
+    if (!newName || newName.trim() === "") return;
 
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:3000/brands/${editBrandId}`,
-        { name: novoNomeMarca },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://localhost:3000/brands/${id}`,
+        { name: newName },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setMensagem("Marca atualizada com sucesso!");
-      setNovoNomeMarca("");
       fetchBrands();
     } catch (error) {
       setMensagem("Erro ao atualizar a marca.");
@@ -118,80 +92,54 @@ const CadastroMarca: React.FC = () => {
   };
 
   return (
-    <div className="cartalogo-container">
+    <div className="container">
       <h1>Cadastro de Marcas</h1>
-      {mensagem && <p>{mensagem}</p>}
+      {mensagem && <p className="mensagem">{mensagem}</p>}
 
-      {}
-      <div className="delete-brand-section">
-        <h2>Deletar Marca</h2>
-        {brands && brands.length > 0 ? (
-          <>
-            <select
-              value={selectedBrand}
-              onChange={(e) => setSelectedBrand(e.target.value)}
-            >
-              {brands.map((brand) => (
-                <option key={brand.id} value={brand.id}>
-                  {brand.name}
-                </option>
-              ))}
-            </select>
-            <button className="btnex" onClick={handleDeleteBrand}>
-              Excluir Marca
-            </button>
-          </>
-        ) : (
-          <p>Nenhuma marca cadastrada.</p>
-        )}
-      </div>
-
-      {}
-      <div className="update-brand-section">
-        <h2>Atualizar Nome da Marca</h2>
-        {brands && brands.length > 0 ? (
-          <>
-            <select
-              value={editBrandId}
-              onChange={(e) => setEditBrandId(e.target.value)}
-            >
-              {brands.map((brand) => (
-                <option key={brand.id} value={brand.id}>
-                  {brand.name}
-                </option>
-              ))}
-            </select>
-            <input
-              className="novomarca"
-              type="text"
-              placeholder="Novo nome da marca"
-              value={novoNomeMarca}
-              onChange={(e) => setNovoNomeMarca(e.target.value)}
-            />
-            <button onClick={handleUpdateBrand}>Atualizar Marca</button>
-          </>
-        ) : (
-          <p>Nenhuma marca disponível para atualizar.</p>
-        )}
-      </div>
-
-      {}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="nomemarca" htmlFor="marca">
-            Cadastrar Marca:
-          </label>
-          <input
-            id="marca"
-            type="text"
-            value={marca}
-            onChange={(e) => setMarca(e.target.value)}
-            placeholder="Insira o nome da marca"
-            required
-          />
-        </div>
-        <button type="submit">Cadastrar Marca</button>
+      <form onSubmit={handleSubmit} className="form-inline">
+        <input
+          type="text"
+          value={marca}
+          onChange={(e) => setMarca(e.target.value)}
+          placeholder="Nome da marca"
+          required
+        />
+        <button type="submit">Adicionar</button>
       </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {brands.map((brand) => (
+            <tr key={brand.id}>
+              <td>{brand.id}</td>
+              <td>{brand.name}</td>
+              <td className="action-buttons">
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDeleteBrand(brand.id)}
+                >
+                  <FaTrashCan size={15} color="red" />
+                  Excluir
+                </button>
+                <button
+                  className="btn-edit"
+                  onClick={() => handleEditBrand(brand.id, brand.name)}
+                >
+                  <FaPencilAlt size={15} color="#ffcc00" />
+                  Editar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

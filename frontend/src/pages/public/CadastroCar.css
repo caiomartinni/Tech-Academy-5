@@ -1,25 +1,26 @@
 .cartalogo-container {
-  font-family: Arial, sans-serif;
-  max-width: 500px;
-  margin: 0 auto;
+  font-family: "Poppins", sans-serif;
+  max-width: 800px;
+  margin: auto;
   padding: 20px;
-
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px);
+  text-align: center;
+  backdrop-filter: blur(15px);
   margin-top: 50px;
-  margin-bottom: 50px;
 }
 
 h1 {
-  text-align: center;
   color: #ffcc00;
+  font-weight: bold;
+}
+
+.mensagem {
+  color: green;
+  font-size: 16px;
 }
 
 .form-group {
   margin-bottom: 15px;
+  text-align: left;
 }
 
 label {
@@ -35,6 +36,7 @@ select {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 14px;
 }
 
 button {
@@ -45,13 +47,140 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 button:hover {
   background-color: white;
   color: #ffcc00;
+  border: 1px solid #ffcc00;
 }
 
-.btnex {
-  margin-top: 10px;
+/* 🌟 ORGANIZAÇÃO DOS FILTROS */
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+/* Select da marca */
+.filter-container select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  background: white;
+  font-size: 14px;
+}
+
+/* Botão quadrado de filtro */
+.btn-filter {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #888;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-filter:hover {
+  border-color: #555;
+}
+
+/* Botões de ordenação */
+.btn-sort {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #888;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-sort:hover {
+  border-color: #555;
+}
+
+/* 🌟 ESTILO DA TABELA */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+th,
+td {
+  padding: 12px;
+}
+
+th {
+  background-color: #ffcc00;
+  color: white;
+}
+
+tr {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Botões de ação */
+.btn-delete,
+.btn-edit,
+.btn-version {
+  width: 100px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Botão de excluir */
+.btn-delete {
+  border: 2px solid red;
+  color: red;
+  background: transparent;
+}
+
+.btn-delete:hover {
+  border-color: darkred;
+  color: darkred;
+}
+
+/* Botão de editar */
+.btn-edit {
+  border: 2px solid #ffcc00;
+  color: #ffcc00;
+  background: transparent;
+}
+
+.btn-edit:hover {
+  border-color: #d4aa00;
+  color: #d4aa00;
+}
+
+/* Botão de versões */
+.btn-version {
+  border: 2px solid #80aaff;
+  color: #80aaff;
+  background: transparent;
+}
+
+.btn-version:hover {
+  border-color: #4d7aff;
+  color: #4d7aff;
 }

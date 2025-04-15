@@ -118,9 +118,8 @@
   width: 100px;
   height: 30px;
   display: flex;
-  align-items: center;     /* Alinha verticalmente */
-  justify-content: center
-  
+  align-items: center; /* Alinha verticalmente */
+  justify-content: center;
 }
 
 .card-title.h5 {
@@ -130,4 +129,13 @@
 
 .card-body {
   align-items: center;
+}
+
+.lembrarsenha {
+  font-size: 15px;
+  display: flex;
+}
+
+.checkbox {
+  width: 15%;
 }

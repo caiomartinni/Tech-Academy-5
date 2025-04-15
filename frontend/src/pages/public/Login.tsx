@@ -85,8 +85,8 @@ function Login() {
           </div>
 
           <div className="remember-forgot">
-            <label>
-              <input type="checkbox" />
+            <label className="lembrarsenha">
+              <input type="checkbox" className="checkbox" />
               Lembrar Senha
             </label>
             <a href="/recuperar-senha">Esqueceu a Senha?</a>
