@@ -56,17 +56,18 @@ button:hover {
   border: 1px solid #ffcc00;
 }
 
-/* 🌟 ORGANIZAÇÃO DOS FILTROS */
-.filter-container {
+/* 🌟 ORGANIZAÇÃO DOS FILTROS E ORDENAÇÃO */
+.filter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 20px 0;
-  padding: 10px;
+  padding: 10px 0;
+  gap: 20px;
 }
 
 /* Select da marca */
-.filter-container select {
+.filter-header select {
   padding: 8px;
   border-radius: 5px;
   border: 2px solid #ccc;
@@ -74,36 +75,29 @@ button:hover {
   font-size: 14px;
 }
 
-/* Botão quadrado de filtro */
-.btn-filter {
-  width: 40px;
-  height: 40px;
-  border: 2px solid #888;
-  background: white;
+/* Container de botões de ordenação */
+.sort-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.btn-filter:hover {
-  border-color: #555;
+  gap: 10px;
 }
 
 /* Botões de ordenação */
 .btn-sort {
   width: 40px;
   height: 40px;
-  border: 2px solid #888;
-  background: white;
+  background: #ffcc00;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
 }
 
 .btn-sort:hover {
-  border-color: #555;
+  background: white;
+  color: #ffcc00;
 }
 
 /* 🌟 ESTILO DA TABELA */

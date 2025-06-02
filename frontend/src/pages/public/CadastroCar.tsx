@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import "./CadastroCar.css";
-import { FaTrashCan } from "react-icons/fa6";
+import { FaTrashCan, FaArrowDownAZ, FaArrowUpAZ } from "react-icons/fa6";
 import { FaPencilAlt } from "react-icons/fa";
 import { GoVersions } from "react-icons/go";
 
@@ -33,6 +33,8 @@ const CadastroCar: React.FC = () => {
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
   const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -149,6 +151,17 @@ const CadastroCar: React.FC = () => {
     setYear("");
   };
 
+  const filteredCarros = carros
+    .filter(
+      (carro) =>
+        selectedBrand === "" || carro.brandId.toString() === selectedBrand
+    )
+    .sort((a, b) =>
+      order === "asc"
+        ? a.model.localeCompare(b.model)
+        : b.model.localeCompare(a.model)
+    );
+
   return (
     <div className="cartalogo-container">
       <h1>Cadastro de Veículos</h1>
@@ -233,6 +246,48 @@ const CadastroCar: React.FC = () => {
         </form>
       </div>
 
+      <div
+        className="filter-header"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: "20px 0",
+        }}
+      >
+        <div>
+          <label htmlFor="filtro-marca">Filtrar por marca:</label>
+          <select
+            id="filtro-marca"
+            value={selectedBrand}
+            onChange={(e) => setSelectedBrand(e.target.value)}
+          >
+            <option value="">Todas</option>
+            {marcas.map((marca) => (
+              <option key={marca.id} value={marca.id.toString()}>
+                {marca.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="sort-buttons">
+          <button
+            className="btn-sort"
+            onClick={() => setOrder("asc")}
+            title="Ordem A-Z"
+          >
+            <FaArrowDownAZ />
+          </button>
+          <button
+            className="btn-sort"
+            onClick={() => setOrder("desc")}
+            title="Ordem Z-A"
+          >
+            <FaArrowUpAZ />
+          </button>
+        </div>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -243,7 +298,7 @@ const CadastroCar: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {carros.map((carro) => (
+          {filteredCarros.map((carro) => (
             <tr key={carro.id}>
               <td>{carro.id}</td>
               <td>{carro.model}</td>
